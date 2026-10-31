@@ -1,1 +1,11 @@
+#Entorno Virtual:
 venv/
+
+#Python Bytecode y cache:
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Testing y Cobertura
+.pytest_cache/
+.coverage                                                                                                                                                                     
