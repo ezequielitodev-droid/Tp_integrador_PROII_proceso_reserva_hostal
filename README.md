@@ -68,11 +68,45 @@ Permite registrar a un huésped o más huéspedes, consultar qué habitaciones e
 
 ### 4.1 Crear una reserva
 
+```mermaid
+stateDiagram-v2
+    [*] --> ConsultarDisponibilidad
+    ConsultarDisponibilidad --> BuscarHabitacionesDisponibles
+    BuscarHabitacionesDisponibles --> RegistrarDatosHuesped
+    RegistrarDatosHuesped --> GenerarReserva
+```
+
 ### 4.2 Modificar una reserva
+
+```mermaid
+stateDiagram-v2
+    [*] --> SeleccionarReserva
+    SeleccionarReserva --> ConsultarInfoActual
+    ConsultarInfoActual --> ModificarLosDatos
+    ModificarLosDatos --> ValidarCambios
+    ValidarCambios --> SI
+    SI --> ActualizarReserva
+    ValidarCambios --> NO
+    NO --> RechazarModificacion
+```
 
 ### 4.3 Actualizar una reserva
 
+```mermaid
+stateDiagram-v2
+    [*] --> ReservaViejaBD
+    ReservaViejaBD --> UPDATE
+    UPDATE --> ReservaModificadaBD
+```
+
 ### 4.4 Eliminar una reserva
+
+```mermaid
+stateDiagram-v2
+    [*] --> SeleccionarReserva
+    SeleccionarReserva --> DELETE
+    DELETE --> ReservaEliminada
+```
 
 ### 4.5 Estados de la reserva
 
@@ -155,34 +189,37 @@ _(Pendiente: diagrama de clases. Guardar como `docs/diagrama_clases.png`.)_
 ## 7. Estructura del proyecto
 
 ```
-hostel/
-├── run.py                  # arranca la aplicación web
-├── config.py               # configuración (lee el .env)
-├── .env.example            # plantilla de variables de entorno
-├── requirements.txt
-├── README.md
-├── models/                 # clases del dominio (POO)
-├── database/               # conexión y repositorios (CRUD)
-├── services/               # reglas del negocio
-├── exceptions/             # excepciones propias
-├── reports/                # consultas, reportes, gráficos
-├── utils/                  # logger y validadores
-├── ui/web/
-│   ├── __init__.py         # crear_app()
-│   ├── errors.py
-│   ├── routes/
-│   ├── templates/
-│   └── static/
-│       ├── css/
-│       └── js/
-├── sql/
-├── docs/                   # diagramas y documentos
-├── tests/
-├── backups/                # exportaciones JSON (ignorado por Git)
-└── logs/                   # archivos de log (ignorado por Git)
+proceso_reserva_hostal/
+├── backups/
+│   ├── storage/
+│   └── backup_manager.py
+├── core/
+│   └── reserva_manager.py
+├── dao/
+│   ├── db_connection.py
+│   └── huesped_dao.py
+├── database/
+│   ├── queries.sql
+│   └── schema.sql
+├── loggers/
+│   └── logger_config.py
+├── models/
+│   ├── habitaciones.py
+│   ├── huesped.py
+│   ├── persona.py
+│   └── reservas.py
+├── reports/
+│   └── analytics.py
+├── venv/
+├── views/
+│   ├── CLI/
+│   ├── GUI/
+│   └── web/
+├── .gitignore
+├── LICENSE
+├── main.py
+└── README.md
 ```
-
-**Regla de dependencias:** `ui/web` llama a `services`, que usan `database` y `models`. El núcleo no conoce la interfaz.
 
 ## 8. Instalación y ejecución
 
@@ -252,6 +289,7 @@ Marcar con `[x]` lo que esté terminado y probado.
 **Base de datos**
 - [ ] Script de creación de tablas
 - [ ] Datos de prueba
+- [ ] Configurar variables de entorno!!!!
 - [ ] Consulta compleja 1
 - [ ] Consulta compleja 2
 - [ ] Consulta compleja 3
