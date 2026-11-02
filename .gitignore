@@ -6,6 +6,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Testing y Cobertura
+#Testing y Cobertura
 .pytest_cache/
-.coverage                                                                                                                                                                     
+.coverage       
+
+#Variables de entorno
+.env
