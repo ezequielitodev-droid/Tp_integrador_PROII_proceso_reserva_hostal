@@ -238,7 +238,7 @@ _(Pendiente: DFD nivel 0 y nivel 1. Guardar como `docs/dfd_nivel0.png` y `docs/d
 
 ### 6.4 Diagrama de Clases (DCD)
 
-![Diagrama CD del Hostal](docs/img/WhatsApp%20Image%202026-11-02%20at%2017.14.35.jpeg)
+![Diagrama CD del Hostal](docs/img/WhatsApp%20Image%202026-11-03%20at%2014.19.28.jpeg)
 
 ## 7. Estructura del proyecto
 
