@@ -10,9 +10,9 @@ PATRON_CORREO_VALIDO = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9
 
 #Personas:-------------------------
 
-def es_id_persona_valido(nombre: int) -> bool:
+def es_id_persona_valido(id: int) -> bool:
 
-    return nombre is not None and isinstance(nombre, int)
+    return id is not None and isinstance(id, int) and id >= 1
 
 def es_nombre_valido(nombre: str) -> bool:
 
@@ -113,4 +113,3 @@ def es_correo_valido(correo: str) -> bool:
     return len(correo) <= 100 and PATRON_CORREO_VALIDO.fullmatch(correo) is not None
 
 #Personas:-------------------------
-
