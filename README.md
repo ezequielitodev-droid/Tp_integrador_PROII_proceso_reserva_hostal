@@ -11,7 +11,7 @@ Trabajo Final de **Programación 2** · Instituto Superior Del Milagro
 | Proceso modelado | Gestionar Reserva |
 | Entrega límite | 09/11/2026, 23:59 hs |
 | Exposición | Desde el 11/11/2026 |
-| Tecnologías | Python, MySQL, (Flask), Pandas, Matplotlib |
+| Tecnologías, herramientas y conceptos utilizados | Python 3.12.0, MySQL 8.0.46, Aiven, PyQt, Logging, Pathlib, Pandas, Matplotlib, Variables de entorno, Dependencias, DBeaver|
 | Formato de backups y reportes | JSON |
 
 ---
@@ -30,8 +30,9 @@ Trabajo Final de **Programación 2** · Instituto Superior Del Milagro
 5. [Reglas del negocio](#5-reglas-del-negocio)
 6. [Modelado de datos](#6-modelado-de-datos)
    - [6.1 Diagrama Entidad-Relación (DER)](#61-diagrama-entidad-relación-der)
-   - [6.2 Diagrama de Flujo de Datos (DFD)](#62-diagrama-de-flujo-de-datos-dfd)
-   - [6.3 Diagrama de Clases (DCD)](#63-diagrama-de-clases-dcd)
+   - [6.2 Derivación de tablas normalizadas](#62-derivación-de-tablas-normalizadas)
+   - [6.3 Diagrama de Flujo de Datos (DFD)](#63-diagrama-de-flujo-de-datos-dfd)
+   - [6.4 Diagrama de Clases (DCD)](#64-diagrama-de-clases-dcd)
 7. [Estructura del proyecto](#7-estructura-del-proyecto)
 8. [Instalación y ejecución](#8-instalación-y-ejecución)
 9. [Bitácora de avances](#9-bitácora-de-avances)
@@ -42,7 +43,16 @@ Trabajo Final de **Programación 2** · Instituto Superior Del Milagro
 
 ## 1. Narrativa descriptiva
 
-_(Pendiente: redactar la narrativa completa, de una a dos páginas, y guardarla en `docs/narrativa.md`. Puede basarse en las secciones 2 a 5.)_
+## Vista de Gestión de Reservas en Hostales
+
+### ¿Por qué nació la vista?
+
+En la recepción de un hostal, el manejo manual o desorganizado de las reservas colapsa la atención y genera errores críticos en el mostrador. Los principales problemas que motivaron el desarrollo de esta vista específica para el recepcionista son:
+
+- *El riesgo inminente de sobre reserva:* Al no contar con una validación automatizada en pantalla, es fácil asignar una misma habitación a dos huéspedes distintos para las mismas fechas.
+- *Demoras en la atención cara a cara:* Buscar una reserva hojeando cuadernos o planillas lentas hace esperar al viajero recién llegado.
+- *Errores al modificar o calcular estancias:* Ajustar fechas de última hora o calcular los costos de forma manual bajo presión genera confusiones y cuentas incorrectas.
+- *Pérdida de control del inventario de habitaciones:* No saber con certeza inmediata qué espacios están libres, ocupados o bloqueados por cancelaciones.
 
 ## 2. Descripción del proceso
 
@@ -62,7 +72,7 @@ Permite registrar a un huésped o más huéspedes, consultar qué habitaciones e
 | Actor | Rol |
 |---|---|
 | **Recepcionista / administrador** | Usa el sistema: busca disponibilidad, carga huéspedes y reservas, cancela y consulta reportes. |
-| **Huésped** | Persona que solicita la reserva. Aporta sus datos, pero no usa el sistema directamente. |
+| **Cliente** | Persona que solicita la reserva. Aporta sus datos, pero no usa el sistema directamente. |
 
 ## 4. Flujo del proceso
 
@@ -123,41 +133,95 @@ stateDiagram-v2
 2. No se pueden crear reservas con fecha de ingreso en el pasado.
 3. Una habitación no puede tener dos reservas activas que se superpongan en fechas.
 4. La cantidad de personas no puede superar la capacidad de la habitación.
-5. Un huésped se identifica por un ID único y por su documento, que no puede repetirse.
+5. Un huésped se identifica por un ID único.
 6. Una reserva cancelada no se elimina: se conserva con su estado.
 7. No se puede eliminar un huésped ni una habitación que tengan reservas asociadas.
-
-> _Completar o ajustar a medida que se definan más reglas._
+8. Los atributos como nombre y apellidos solo se pediran atomicamente.
 
 ## 6. Modelado de datos
 
-Los diagramas se guardan como imágenes en `docs/` y se enlazan desde acá.
-
 ### 6.1 Diagrama Entidad-Relación (DER)
 
-_(Pendiente: DER definitivo. Guardar como `docs/der.png`.)_
+![Diagrama ER del Hostal](docs/img/WhatsApp%20Image%202026-11-02%20at%2022.00.09.jpeg)
 
-<!-- Cuando esté listo, descomentar:
-![DER](docs/der.png)
--->
-
-**Borrador de entidades** (a validar):
+**Borrador de entidades**:
 
 | Entidad | Atributos principales |
 |---|---|
-| `habitacion` | id, numero, tipo (privada/compartida), capacidad, precio_noche |
-| `huesped` | id, nombre, apellido, documento, telefono, email, pais |
-| `reserva` | id, habitacion_id, fecha_ingreso, fecha_egreso, personas, estado, total |
-| `reserva_huesped` (N:M) | reserva_id, huesped_id |
+| `CLIENTES` | id_cilente, nombre, apellido, dni, telefono, correo |
+| `HUESPEDES` | id_huesped, nombre, apellido, dni, telefono |
+| `HABITACIONES` | id_habitacion, numero, capacidad, precio_noche, estado |
+| `RESERVAS` | id_reserva, fecha_reserva, fecha_ingreso, fecha_salida, estado, monto_total, id_cliente |
+| `RESERVAS_X_HUESPEDES` | id_res_x_hue, id_reserva, id_huesped |
+| `RESERVAS_X_HABITACIONES` | id_res_x_hab, id_reservas, id_habitacion |
 
-```mermaid
-erDiagram
-    HABITACION ||--o{ RESERVA : "es reservada en"
-    RESERVA ||--o{ RESERVA_HUESPED : incluye
-    HUESPED ||--o{ RESERVA_HUESPED : participa
-```
+### 6.2 Derivación de tablas normalizadas
 
-### 6.2 Diagrama de Flujo de Datos (DFD)
+Tablas resultantes de pasar el DER a 3FN, con datos de ejemplo para ver cómo quedan cargadas. **PK** indica clave primaria y **FK** clave foránea. Los datos son ficticios.
+
+#### 1. CLIENTES
+
+| id_cliente | nombre | apellido | dni | telefono | correo |
+|---|---|---|---|---|---|
+| PK | | | | | |
+| 1 | Martín | Gómez | 30123456 | 387-4112233 | martin.gomez@example.com |
+| 2 | Sofía | Álvarez | 28456789 | 387-4556677 | sofia.alvarez@example.com |
+
+#### 2. HUESPEDES
+
+| id_huesped | nombre | apellido | dni | telefono |
+|---|---|---|---|---|
+| PK | | | | |
+| 1 | Lucía | Pérez | 40111222 | 387-4001122 |
+| 2 | Tomás | Ruiz | 41222333 | 387-4002233 |
+| 3 | Camila | Díaz | 42333444 | 387-4003344 |
+| 4 | Julián | Torres | 39444555 | 387-4004455 |
+| 5 | Valentina | Cruz | 38555666 | 387-4005566 |
+| 6 | Mateo | Silva | 37666777 | 387-4006677 |
+
+#### 3. HABITACIONES
+
+| id_habitacion | numero | capacidad | precio_noche | estado |
+|---|---|---|---|---|
+| PK | | | | |
+| 1 | 101 | 4 | 18000.00 | DISPONIBLE |
+| 2 | 102 | 2 | 25000.00 | OCUPADA |
+| 3 | 201 | 6 | 40000.00 | DISPONIBLE |
+| 4 | 202 | 2 | 22000.00 | DISPONIBLE |
+
+#### 4. RESERVAS
+
+| id_reserva | fecha_reserva | fecha_ingreso | fecha_salida | estado | monto_total | id_cliente |
+|---|---|---|---|---|---|---|
+| PK | | | | | | FK → CLIENTES |
+| 1 | 2026-10-30 | 2026-11-10 | 2026-11-13 | RESERVADA | 54000.00 | 1 |
+| 2 | 2026-11-01 | 2026-11-15 | 2026-11-17 | RESERVADA | 86000.00 | 2 |
+| 3 | 2026-11-02 | 2026-11-25 | 2026-11-27 | CANCELADA | 80000.00 | 1 |
+
+#### 5. RESERVAS_X_HUESPEDES
+
+| id_res_x_hue | id_reserva | id_huesped |
+|---|---|---|
+| PK | FK → RESERVAS | FK → HUESPEDES |
+| 1 | 1 | 1 |
+| 2 | 1 | 2 |
+| 3 | 1 | 3 |
+| 4 | 2 | 4 |
+| 5 | 2 | 5 |
+| 6 | 2 | 6 |
+| 7 | 3 | 1 |
+
+#### 6. RESERVAS_X_HABITACIONES
+
+| id_res_x_hab | id_reserva | id_habitacion |
+|---|---|---|
+| PK | FK → RESERVAS | FK → HABITACIONES |
+| 1 | 1 | 1 |
+| 2 | 2 | 1 |
+| 3 | 2 | 2 |
+| 4 | 3 | 3 |
+
+### 6.3 Diagrama de Flujo de Datos (DFD)
 
 _(Pendiente: DFD nivel 0 y nivel 1. Guardar como `docs/dfd_nivel0.png` y `docs/dfd_nivel1.png`.)_
 
@@ -172,19 +236,9 @@ _(Pendiente: DFD nivel 0 y nivel 1. Guardar como `docs/dfd_nivel0.png` y `docs/d
 - Procesos: consultar disponibilidad, registrar huésped, crear reserva, modificar reserva, cancelar reserva, generar reportes.
 - Almacenes de datos: habitaciones, huéspedes, reservas.
 
-### 6.3 Diagrama de Clases (DCD)
+### 6.4 Diagrama de Clases (DCD)
 
-_(Pendiente: diagrama de clases. Guardar como `docs/diagrama_clases.png`.)_
-
-<!-- Cuando esté listo, descomentar:
-![Diagrama de clases](docs/diagrama_clases.png)
--->
-
-**Borrador de clases** (a validar)
-
-- `Habitacion` (clase base) → `HabitacionPrivada`, `HabitacionCompartida`, cada una con su `calcular_precio(noches, personas)` (polimorfismo).
-- `Huesped`, `Reserva`.
-- Excepciones propias: `HostelError` (base), `DatosInvalidosError`, `ReservaSolapadaError`, `CapacidadExcedidaError`, `RegistroNoEncontradoError`, `ErrorBaseDatos`.
+![Diagrama CD del Hostal](docs/img/WhatsApp%20Image%202026-11-02%20at%2017.14.35.jpeg)
 
 ## 7. Estructura del proyecto
 
@@ -193,17 +247,24 @@ proceso_reserva_hostal/
 ├── backups/
 │   ├── storage/
 │   └── backup_manager.py
+├── certs
+│   └──ca.pem
 ├── core/
 │   └── reserva_manager.py
 ├── dao/
 │   ├── db_connection.py
 │   └── huesped_dao.py
 ├── database/
+│   ├── init_db.py
+│   ├── datos_prueba.sql
 │   ├── queries.sql
 │   └── schema.sql
+├── docs
+│   └── img
 ├── loggers/
 │   └── logger_config.py
 ├── models/
+│   ├── clientes.py
 │   ├── habitaciones.py
 │   ├── huesped.py
 │   ├── persona.py
@@ -215,10 +276,13 @@ proceso_reserva_hostal/
 │   ├── CLI/
 │   ├── GUI/
 │   └── web/
+├── .env
+├── .env.example
 ├── .gitignore
 ├── LICENSE
 ├── main.py
 └── README.md
+└── requirements.txt
 ```
 
 ## 8. Instalación y ejecución
@@ -241,12 +305,9 @@ pip install -r requirements.txt
 # 4. Configurar variables de entorno
 cp .env.example .env              # y completar usuario y contraseña de MySQL
 
-# 5. Crear la base de datos y cargar los datos de prueba
-mysql -u <usuario> -p < sql/crear_tablas.sql
-mysql -u <usuario> -p < sql/datos_prueba.sql
+# 5. Instala DBeaver, y configura una nueva conexion con los datos del .env
 
-# 6. Ejecutar la aplicación
-python run.py                     # abre en http://localhost:5000
+# Aun falta a esto
 ```
 
 **Pruebas:** `pytest`
@@ -267,8 +328,7 @@ Anotar acá cada decisión importante y el motivo, para poder explicarlas en la 
 |---|---|---|
 | 28/10/2026 | Modelar solo la gestión de reservas | Alcance acotado para llegar a tiempo con todos los requisitos obligatorios. |
 | 28/10/2026 | Backups y reportes en JSON en lugar de CSV | Autorizado por el profesor. |
-| 28/10/2026 | Interfaz web con Flask, con JavaScript solo para los gráficos del dashboard | Mantener la lógica en Python y simplificar la parte web. |
-| 28/10/2026 | La habitación ocupada se deduce de las reservas, no se guarda como estado | Evita datos duplicados e inconsistencias. |
+| 02/11/26 | Los atributos _nombre_, _apellido_ tanto de los Clientes como de los Huespedes seran _atomicos_. Ej: Solo se ingresara un nombre de cliente y un apellido sea de un Cliente o de un Huesped. | Para simplificar la lógica del sistema con relación a los datos.
 
 ## 11. Lista de pendientes
 
@@ -276,20 +336,35 @@ Marcar con `[x]` lo que esté terminado y probado.
 
 **Documentación y modelado**
 - [x] Definición del proceso a modelar
-- [ ] Narrativa descriptiva
-- [ ] Flujo: crear una reserva
-- [ ] Flujo: modificar una reserva
-- [ ] Flujo: actualizar una reserva
-- [ ] Flujo: eliminar una reserva
-- [ ] Diagrama Entidad-Relación (DER)
+- [x] Narrativa descriptiva
+- [x] Flujo: crear una reserva
+- [x] Flujo: modificar una reserva
+- [x] Flujo: actualizar una reserva
+- [x] Flujo: eliminar una reserva
+- [x] Diagrama Entidad-Relación (DER)
+- [x] Derivación de las tablas ya normalizadas
 - [ ] Diagrama de Flujo de Datos (DFD)
-- [ ] Diagrama de Clases (DCD)
-- [ ] Estructura de carpetas y configuración
+- [x] Diagrama de Clases (DCD)
+- [ ] Modificar estructura estructura de carpetas para que cumpla la actual
+- [ ] Definir las capacidades de cada habitacion y formalizarlas en las reglas de negocio
+- [ ] Validar los campos para que cumplan el formato
+- [ ] Modelar Persona
+- [ ] Modelar Cliente
+- [ ] Modelar Huesped
+- [ ] Modelar Habitación
+- [ ] Modelar Reservas
+- [ ] Crear las validaciones de cada modelo
+- [ ] Documentación Docstring actualizada
+- [ ] Documentación de instalación actualizada
+- [ ] Testeo actualiizado
+- [ ] Bitacora actualzada
 
 **Base de datos**
-- [ ] Script de creación de tablas
-- [ ] Datos de prueba
-- [ ] Configurar variables de entorno!!!!
+- [ ] Crear un servidor en la nube
+- [ ] Crear las tablas
+- [ ] Tener en cuenta el UNIQUE en las tablas intermedias
+- [ ] Cargar datos de prueba
+- [ ] Configurar variables de entorno.
 - [ ] Consulta compleja 1
 - [ ] Consulta compleja 2
 - [ ] Consulta compleja 3
@@ -314,5 +389,7 @@ Marcar con `[x]` lo que esté terminado y probado.
 **GUI**
 
 **Otros**
+
+- [ ] Llenar .env.example para tener la un ejemplo documentado
 
 **Cierre**
