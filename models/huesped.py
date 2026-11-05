@@ -19,4 +19,4 @@ class Huesped(Persona):
             telefono: str
     ) -> None:
 
-        super().__init__(id_huesped, nombre, apellido, dni, telefono, None)
+        super().__init__(id_huesped, nombre, apellido, dni, telefono)
