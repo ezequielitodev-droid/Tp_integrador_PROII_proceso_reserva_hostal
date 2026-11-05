@@ -47,14 +47,14 @@ INSERT INTO huespedes (nombre, apellido, dni, telefono) VALUES
 INSERT INTO habitaciones (numero, capacidad, precio_noche, estado) VALUES
 (101, 4, 18000.00, 'DISPONIBLE'),
 (102, 4, 18000.00, 'DISPONIBLE'),
-(103, 6, 15000.00, 'DISPONIBLE'),
-(104, 8, 12000.00, 'DISPONIBLE'),
+(103, 2, 15000.00, 'DISPONIBLE'),
+(104, 1, 12000.00, 'DISPONIBLE'),
 (201, 2, 25000.00, 'DISPONIBLE'),
 (202, 2, 25000.00, 'OCUPADA'),
 (203, 3, 22000.00, 'DISPONIBLE'),
 (204, 2, 28000.00, 'OCUPADA'),
 (301, 4, 20000.00, 'DISPONIBLE'),
-(302, 6, 16000.00, 'OCUPADA');
+(302, 3, 16000.00, 'OCUPADA');
 
 INSERT INTO reservas (fecha_reserva, fecha_ingreso, fecha_salida, estado, monto_total, id_cliente) VALUES
 ('2026-09-01', '2026-09-10', '2026-09-13', 'RESERVADA', 54000.00, 1),
