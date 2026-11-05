@@ -17,14 +17,22 @@ load_dotenv()
 
 #Moduls: 
 
+def _leer_variable(nombre: str) -> str:
+    
+    valor = os.getenv(nombre)
+    if valor is None or valor.strip() == "":
+        raise RuntimeError(f"Falta la variable de entorno {nombre}. Revisá el archivo .env")
+    
+    return valor
+
 def obtener_conexion():
     return mysql.connector.connect(
-        host = os.getenv("DB_HOST"), 
-        port = int(os.getenv("DB_PORT")), 
-        user = os.getenv("DB_USER"), 
-        password = os.getenv("DB_PASSWORD"), 
-        database = os.getenv("DB_NAME"), 
-        ssl_ca = str(PATH_SSL_CA)
+        host=_leer_variable("DB_HOST"),
+        port=int(_leer_variable("DB_PORT")),
+        user=_leer_variable("DB_USER"),
+        password=_leer_variable("DB_PASSWORD"),
+        database=_leer_variable("DB_NAME"),
+        ssl_ca=str(PATH_SSL_CA)
     )
 
 
