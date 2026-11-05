@@ -6,8 +6,7 @@ from utils.validators.datavalidators import (
     es_nombre_valido, 
     es_apellido_valido, 
     es_dni_valido, 
-    es_telefono_valido, 
-    es_correo_valido
+    es_telefono_valido
 )
 
 #Constants:
@@ -24,33 +23,28 @@ class Persona(ABC):
             nombre: str, 
             apellido: str, 
             dni: str, 
-            telefono: str, 
-            correo: str
+            telefono: str
     ) -> None: 
 
         if not es_id_persona_valido(id_persona):
             raise ValueError("Identificador unico invalido...")
-        self.__id_persona: int = id_persona
+        self.__id_persona: int | None = id_persona
 
         if not es_nombre_valido(nombre): 
             raise ValueError("Nombre invalido...")
-        self.__nombre: str = nombre
+        self.__nombre: str = nombre.strip()
 
         if not es_apellido_valido(apellido): 
             raise ValueError("Apellido invalido...")
-        self.__apellido: str = apellido
+        self.__apellido: str = apellido.strip()
 
         if not es_dni_valido(dni):
             raise ValueError("DNI invalido...")
-        self.__dni: str = dni
+        self.__dni: str = dni.strip().replace(".", "")
 
         if not es_telefono_valido(telefono):
             raise ValueError("Telefono invalido...")
         self.__telefono: str = telefono
-
-        if not es_correo_valido(correo): 
-            raise ValueError("Correo invalido...")
-        self.__correo = correo
 
     #Methods:
 
@@ -76,8 +70,36 @@ class Persona(ABC):
 
         return self.__telefono
 
-    def get_correo(self) -> str:
-        
-        return self.__correo
-
     #Getters:--------------------
+
+    #Setters:--------------------
+
+    def set_nombre(self, nombre: str) -> None:
+
+        if not es_nombre_valido(nombre):
+            raise ValueError("Nombre invalido...")
+        
+        self.__nombre = nombre.strip()
+
+    def set_apellido(self, apellido: str) -> None:
+
+        if not es_apellido_valido(apellido):
+            raise ValueError("Apellido invalido...")
+        
+        self.__apellido = apellido.strip()
+
+    def set_dni(self, dni: str) -> None:
+
+        if not es_dni_valido(dni):
+            raise ValueError("DNI invalido...")
+        
+        self.__dni = dni.strip().replace(".", "")
+
+    def set_telefono(self, telefono: str) -> None:
+
+        if not es_telefono_valido(telefono):
+            raise ValueError("Telefono invalido...")
+        
+        self.__telefono = telefono
+
+    #Setters:--------------------
