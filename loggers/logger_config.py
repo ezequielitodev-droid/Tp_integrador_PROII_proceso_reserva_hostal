@@ -1,6 +1,11 @@
 #Imports:
 
 import logging
+from pathlib import Path
+
+# Paths:
+RAIZ = Path(__file__).resolve().parent.parent
+PATH_LOG = RAIZ / "logs" / "app.log"
 
 #Modulo instrumental:
 
@@ -30,8 +35,10 @@ def configurar_logging() -> None:
             ubicado en la raíz del proyecto.
     """
 
+    PATH_LOG.parent.mkdir(parents=True, exist_ok=True)
+
     #Definicion de parlantes:
-    handler_app = logging.FileHandler("app.log", encoding="utf-8")
+    handler_app = logging.FileHandler(PATH_LOG, encoding="utf-8")
 
     #Configuración del parlante:
     handler_app.setLevel(logging.INFO)
