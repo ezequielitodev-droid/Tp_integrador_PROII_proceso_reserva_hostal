@@ -137,6 +137,7 @@ stateDiagram-v2
 6. Una reserva cancelada no se elimina: se conserva con su estado.
 7. No se puede eliminar un huésped ni una habitación que tengan reservas asociadas.
 8. Los atributos como nombre y apellidos solo se pediran atomicamente.
+9. Una habitación solo puede tener las siguientes capacidades (camas): 1, 2, 3 y 4
 
 ## 6. Modelado de datos
 
@@ -346,24 +347,24 @@ Marcar con `[x]` lo que esté terminado y probado.
 - [ ] Diagrama de Flujo de Datos (DFD)
 - [x] Diagrama de Clases (DCD)
 - [ ] Modificar estructura estructura de carpetas para que cumpla la actual
-- [ ] Definir las capacidades de cada habitacion y formalizarlas en las reglas de negocio
+- [x] Definir las capacidades de cada habitacion y formalizarlas en las reglas de negocio
 - [ ] Validar los campos para que cumplan el formato
-- [ ] Modelar Persona
-- [ ] Modelar Cliente
-- [ ] Modelar Huesped
-- [ ] Modelar Habitación
-- [ ] Modelar Reservas
-- [ ] Crear las validaciones de cada modelo
+- [x] Modelar Persona
+- [x] Modelar Cliente
+- [x] Modelar Huesped
+- [x] Modelar Habitación
+- [x] Modelar Reservas
+- [x] Crear las validaciones de cada modelo
 - [ ] Documentación Docstring actualizada
 - [ ] Documentación de instalación actualizada
 - [ ] Testeo actualiizado
 - [ ] Bitacora actualzada
 
 **Base de datos**
-- [ ] Crear un servidor en la nube
-- [ ] Crear las tablas
-- [ ] Tener en cuenta el UNIQUE en las tablas intermedias
-- [ ] Cargar datos de prueba
+- [x] Crear un servidor en la nube
+- [x] Crear las tablas
+- [x] Tener en cuenta el UNIQUE en las tablas intermedias
+- [x] Cargar datos de prueba
 - [ ] Configurar variables de entorno.
 - [ ] Consulta compleja 1
 - [ ] Consulta compleja 2
@@ -371,10 +372,11 @@ Marcar con `[x]` lo que esté terminado y probado.
 - [ ] Consulta compleja 4
 
 **Núcleo en Python**
-- [ ] Logging
+- [x] Logging configurado
+- [ ] Logging utilizado completamente
 - [ ] Excepciones propias
-- [ ] Modelos (herencia, polimorfismo, encapsulamiento)
-- [ ] Conexión a MySQL
+- [x] Modelos (herencia, polimorfismo, encapsulamiento)
+- [x] Conexión a MySQL
 - [ ] CRUD de habitaciones
 - [ ] CRUD de huéspedes
 - [ ] CRUD de reservas
