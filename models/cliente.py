@@ -1,6 +1,7 @@
 #Imports:
 
 from models.persona import Persona
+from utils.validators.datavalidators import es_correo_valido
 
 #Constants:
 
@@ -20,4 +21,24 @@ class Cliente(Persona):
             correo: str
     ) -> None:
 
-        super().__init__(id_cliente, nombre, apellido, dni, telefono, correo)
+        super().__init__(id_cliente, nombre, apellido, dni, telefono)
+
+        if not es_correo_valido(correo):
+            raise ValueError("Correo invalido...")
+        self.__correo: str = correo
+
+    #Getters:--------------------
+
+    def get_correo(self) -> str:
+        return self.__correo
+    
+    #Getters:--------------------
+
+    #Setters:--------------------
+    
+    def set_correo(self, correo: str) -> None:
+        if not es_correo_valido(correo):
+            raise ValueError("Correo invalido...")
+        self.__correo = correo
+    
+    #Setters:--------------------
