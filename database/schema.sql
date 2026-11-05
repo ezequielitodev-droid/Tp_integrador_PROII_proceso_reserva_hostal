@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS habitaciones (
     numero INT NOT NULL UNIQUE,
     capacidad INT NOT NULL,
     precio_noche DECIMAL(10, 2) NOT NULL,
-    estado ENUM('DISPONIBLE', 'OCUPADA', 'BLOQUEADA') NOT NULL DEFAULT 'DISPONIBLE',
+    estado ENUM('DISPONIBLE', 'OCUPADA') NOT NULL DEFAULT 'DISPONIBLE',
     PRIMARY KEY (id_habitacion),
     CHECK (capacidad > 0),
     CHECK (precio_noche >= 0)
