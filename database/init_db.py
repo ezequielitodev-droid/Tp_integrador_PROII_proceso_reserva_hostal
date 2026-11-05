@@ -14,7 +14,7 @@ PATH_FOLDER = Path(__file__).resolve().parent
 
 def ejecutar_archivo(nombre) -> None:
 
-     #Leo todo el archivo schema.sql que contiene las instrucciones de creacion de las tablas: 
+    #Leo todo el archivo que contiene las instrucciones SQL: 
     instrucciones_sql = (PATH_FOLDER / nombre).read_text(encoding="utf-8")
 
     #Inicio la conexion con la Nube: 
