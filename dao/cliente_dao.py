@@ -1,8 +1,14 @@
-#Imports:
+# Imports:
 import logging
 
-from db_connection import obtener_conexion
+from dao.db_connection import obtener_conexion
 from models.cliente import Cliente
+from database.queries import (
+    instruccion_crear_cliente, 
+    instruccion_obtener_clientes, 
+    instruccion_obtener_cliente_por_id, 
+    instruccion_modificar_cliente
+)
 
 #Global Variables:
 
@@ -16,17 +22,16 @@ class ClienteDAO:
 
     #Methods: 
 
-    def crear_cliente(self, cliente: Cliente) -> int | None:
+    def crear_cliente(self, cliente: Cliente, conexion_externa = None) -> int | None:
 
-        conexion = None
+        conexion = conexion_externa or obtener_conexion()
+        debe_cerrar = conexion_externa is None
         cursor = None
 
         try:
-
-            conexion = obtener_conexion()
             cursor = conexion.cursor()
 
-            instruccion_sql = ""#Instruccion SQL correspondiente
+            instruccion_sql = instruccion_crear_cliente
 
             valores = (
                 cliente.get_nombre(),
@@ -38,7 +43,11 @@ class ClienteDAO:
             )
 
             cursor.execute(instruccion_sql, valores)
-            conexion.commit()
+            
+            # Solo hacemos commit si la conexión es nuestra; si viene de afuera, 
+            # la transacción la maneja el bloque externo.
+            if debe_cerrar:
+                conexion.commit()
 
             id_generado = cursor.lastrowid
 
@@ -50,7 +59,7 @@ class ClienteDAO:
 
             logging.error(f"Error al crear el cliente: {e}")
 
-            if conexion:
+            if debe_cerrar and conexion:
                 conexion.rollback()
 
             return None
@@ -59,21 +68,21 @@ class ClienteDAO:
 
             if cursor:
                 cursor.close()
-            if conexion and conexion.is_connected():
+            if debe_cerrar and conexion:
                 conexion.close()
 
-    def obtener_clientes(self) -> list[Cliente | None]:
+    def obtener_clientes(self, conexion_externa = None) -> list[Cliente | None]:
 
-        conexion = None
+        conexion = conexion_externa or obtener_conexion()
+        debe_cerrar = conexion_externa is None
         cursor = None
 
         list_clientes = []
 
         try:
-            conexion = obtener_conexion()
             cursor = conexion.cursor()
 
-            instruccion_sql = ""#Instruccion
+            instruccion_sql = instruccion_obtener_clientes
             
             cursor.execute(instruccion_sql)
             resultados = cursor.fetchall()
@@ -105,20 +114,19 @@ class ClienteDAO:
 
             if cursor:
                 cursor.close()
-            if conexion and conexion.is_connected():
+            if debe_cerrar and conexion:
                 conexion.close()
 
-    def obtener_cliente_por_id(self, id_cliente: int) -> Cliente | None:
+    def obtener_cliente_por_id(self, id_cliente: int, conexion_externa = None) -> Cliente | None:
 
-        conexion = None
+        conexion = conexion_externa or obtener_conexion()
+        debe_cerrar = conexion_externa is None
         cursor = None
 
         try:
-
-            conexion = obtener_conexion()
             cursor = conexion.cursor()
 
-            instruccion_sql = ""#Instruccion SQL
+            instruccion_sql = instruccion_obtener_cliente_por_id
             
             valor = (id_cliente, )
 
@@ -155,7 +163,7 @@ class ClienteDAO:
 
             if cursor:
                 cursor.close()
-            if conexion and conexion.is_connected():
+            if debe_cerrar and conexion:
                 conexion.close()
 
     def modificar_cliente(
@@ -166,23 +174,25 @@ class ClienteDAO:
             dni: str | None = None, 
             telefono: str | None = None, 
             correo: str | None = None,
-            activo: bool | None = None
+            activo: bool | None = None,
+            conexion_externa = None
     ) -> Cliente | None:
 
-        conexion = None
+        conexion = conexion_externa or obtener_conexion()
+        debe_cerrar = conexion_externa is None
         cursor = None
 
         try:
-
-            conexion = obtener_conexion()
             cursor = conexion.cursor()
 
-            instruccion_sql = ""#Instruccion SQL
+            instruccion_sql = instruccion_modificar_cliente
 
             valores = (nombre, apellido, dni, telefono, correo, activo, id_cliente)
 
             cursor.execute(instruccion_sql, valores)
-            conexion.commit()
+            
+            if debe_cerrar:
+                conexion.commit()
 
             if cursor.rowcount == 0:
 
@@ -192,13 +202,15 @@ class ClienteDAO:
 
             logging.info(f"Cliente con ID {id_cliente} modificado exitosamente.")
             
-            return self.obtener_cliente_por_id(id_cliente)
+            # Pasamos la conexión externa para mantener la sesión viva si se está reutilizando
+            return self.obtener_cliente_por_id(id_cliente, conexion_externa=conexion)
 
         except Exception as e:
 
             logging.error(f"Error al modificar el cliente: {e}")
 
-            if conexion: conexion.rollback()
+            if debe_cerrar and conexion: 
+                conexion.rollback()
 
             return None
 
@@ -207,10 +219,10 @@ class ClienteDAO:
             if cursor:
                 cursor.close()
 
-            if conexion and conexion.is_connected():
+            if debe_cerrar and conexion:
                 conexion.close()
     
-    def eliminar_cliente(self, id_cliente: int) -> bool:
+    def eliminar_cliente(self, id_cliente: int, conexion_externa = None) -> bool:
         
         """
             Realiza una baja lógica del cliente cambiando su estado 'activo' a False,
@@ -220,7 +232,8 @@ class ClienteDAO:
             
             cliente_modificado = self.modificar_cliente(
                 id_cliente=id_cliente, 
-                activo=False
+                activo=False,
+                conexion_externa=conexion_externa
             )
 
             if cliente_modificado is None:
