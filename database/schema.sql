@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS clientes (
     dni VARCHAR(10) NOT NULL UNIQUE,
     telefono VARCHAR(20),
     correo VARCHAR(100),
+    activo BOOLEAN NOT NULL DEFAULT 1,
     PRIMARY KEY (id_cliente)
 );
 
@@ -16,6 +17,7 @@ CREATE TABLE IF NOT EXISTS huespedes (
     apellido VARCHAR(30) NOT NULL,
     dni VARCHAR(10) NOT NULL UNIQUE,
     telefono VARCHAR(20),
+    activo BOOLEAN NOT NULL DEFAULT 1,
     PRIMARY KEY (id_huesped)
 );
 
@@ -25,6 +27,7 @@ CREATE TABLE IF NOT EXISTS habitaciones (
     capacidad INT NOT NULL,
     precio_noche DECIMAL(10, 2) NOT NULL,
     estado ENUM('DISPONIBLE', 'OCUPADA') NOT NULL DEFAULT 'DISPONIBLE',
+    activo BOOLEAN NOT NULL DEFAULT 1,
     PRIMARY KEY (id_habitacion),
     CHECK (capacidad > 0),
     CHECK (precio_noche >= 0)
@@ -38,11 +41,13 @@ CREATE TABLE IF NOT EXISTS reservas (
     estado ENUM('RESERVADA', 'CANCELADA') NOT NULL DEFAULT 'RESERVADA',
     monto_total DECIMAL(10, 2) NOT NULL DEFAULT 0,
     id_cliente INT NOT NULL,
+    activo BOOLEAN NOT NULL DEFAULT 1,
     PRIMARY KEY (id_reserva),
     FOREIGN KEY (id_cliente) REFERENCES clientes (id_cliente),
     CHECK (fecha_salida > fecha_ingreso)
 );
 
+-- Las tablas intermedias quedan sin el campo activo, tal como pediste
 CREATE TABLE IF NOT EXISTS reservas_x_huespedes (
     id_res_x_hue INT AUTO_INCREMENT,
     id_reserva INT NOT NULL,
