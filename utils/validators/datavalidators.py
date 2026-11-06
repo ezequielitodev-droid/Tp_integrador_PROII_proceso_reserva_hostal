@@ -12,6 +12,12 @@ PATRON_CORREO_VALIDO = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9
 
 #Validators:
 
+#Activo:
+
+def es_activo_valido(activo: bool) -> bool:
+
+    return isinstance(activo, bool)
+
 #Personas:-------------------------
 
 def es_id_persona_valido(id_persona: int | None) -> bool:
