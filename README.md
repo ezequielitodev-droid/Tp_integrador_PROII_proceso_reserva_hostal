@@ -330,6 +330,7 @@ Anotar acá cada decisión importante y el motivo, para poder explicarlas en la 
 | 28/10/2026 | Modelar solo la gestión de reservas | Alcance acotado para llegar a tiempo con todos los requisitos obligatorios. |
 | 28/10/2026 | Backups y reportes en JSON en lugar de CSV | Autorizado por el profesor. |
 | 02/11/26 | Los atributos _nombre_, _apellido_ tanto de los Clientes como de los Huespedes seran _atomicos_. Ej: Solo se ingresara un nombre de cliente y un apellido sea de un Cliente o de un Huesped. | Para simplificar la lógica del sistema con relación a los datos.
+| 05/11/26 | Las entidades tendrán un nuevo campo llamado activo | Para usar una Baja logica en vez de una eliminación en la base de datos.
 
 ## 11. Lista de pendientes
 
@@ -359,6 +360,7 @@ Marcar con `[x]` lo que esté terminado y probado.
 - [ ] Documentación de instalación actualizada
 - [ ] Testeo actualiizado
 - [ ] Bitacora actualzada
+- [ ] MODIFICAR EL README POR EL NUEVO CAMPO ACTIVO
 
 **Base de datos**
 - [x] Crear un servidor en la nube
@@ -387,6 +389,20 @@ Marcar con `[x]` lo que esté terminado y probado.
 - [ ] Gráficos con Matplotlib
 - [ ] Backup en JSON
 - [ ] Restauración desde JSON
+
+**Testeos**
+
+- [ ] Testear modelo persona
+- [ ] Testear modelo cliente
+- [ ] Testear modelo huesped
+- [ ] Testear modelo habitacion
+- [ ] Testear modelo reserva
+- [ ] Testear equipo de sonido
+- [ ] Testear conexion a base de datos
+- [ ] Testear patron DAO cliente
+- [ ] Testear patron DAO huesped
+- [ ] Testear patron DAO habitacion
+- [ ] Testear patron DAO reservas
 
 **GUI**
 
