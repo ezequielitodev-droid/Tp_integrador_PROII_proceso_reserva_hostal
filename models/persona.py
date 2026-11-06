@@ -6,7 +6,8 @@ from utils.validators.datavalidators import (
     es_nombre_valido, 
     es_apellido_valido, 
     es_dni_valido, 
-    es_telefono_valido
+    es_telefono_valido, 
+    es_activo_valido
 )
 
 #Constants:
@@ -23,7 +24,8 @@ class Persona(ABC):
             nombre: str, 
             apellido: str, 
             dni: str, 
-            telefono: str
+            telefono: str, 
+            activo: bool
     ) -> None: 
 
         if not es_id_persona_valido(id_persona):
@@ -45,6 +47,10 @@ class Persona(ABC):
         if not es_telefono_valido(telefono):
             raise ValueError("Telefono invalido...")
         self.__telefono: str = telefono
+
+        if not es_activo_valido(activo):
+            raise ValueError("Activo invalido...")
+        self.__activo: bool = activo
 
     #Methods:
 
@@ -69,6 +75,10 @@ class Persona(ABC):
     def get_telefono(self) -> str:
 
         return self.__telefono
+
+    def get_activo(self) -> bool:
+
+        return self.__activo
 
     #Getters:--------------------
 
@@ -101,5 +111,11 @@ class Persona(ABC):
             raise ValueError("Telefono invalido...")
         
         self.__telefono = telefono
+
+    def set_activo(self, activo: bool) -> None:
+
+        if not es_activo_valido(activo):
+            raise ValueError("Activo invalido...")
+        self.__activo = activo
 
     #Setters:--------------------

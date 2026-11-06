@@ -18,10 +18,11 @@ class Cliente(Persona):
             apellido: str, 
             dni: str, 
             telefono: str, 
-            correo: str
+            correo: str, 
+            activo: bool
     ) -> None:
 
-        super().__init__(id_cliente, nombre, apellido, dni, telefono)
+        super().__init__(id_cliente, nombre, apellido, dni, telefono, activo)
 
         if not es_correo_valido(correo):
             raise ValueError("Correo invalido...")

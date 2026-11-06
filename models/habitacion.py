@@ -5,7 +5,8 @@ from utils.validators.datavalidators import(
     es_numero_valido, 
     es_capacidad_valida,
     es_precio_noche_valido,
-    es_estado_valido
+    es_estado_valido, 
+    es_activo_valido
 )
 from utils.datatypes.EstadoHabitacion import EstadoHabitacion
 from decimal import Decimal
@@ -22,7 +23,8 @@ class Habitacion():
         numero: int, 
         capacidad: int,
         precio_noche: Decimal, 
-        estado: EstadoHabitacion
+        estado: EstadoHabitacion, 
+        activo: bool
     ) -> None:
     
         if not es_id_habitacion_valida(id_habitacion):
@@ -45,6 +47,10 @@ class Habitacion():
             raise ValueError("Estado habitación inválido...")
         self.__estado: EstadoHabitacion = estado
 
+        if not es_activo_valido(activo):
+            raise ValueError("Activo inválido...")
+        self.__activo: bool = activo
+
     #Getters:--------------------
     
     def get_id_habitacion(self) -> int | None:
@@ -66,6 +72,10 @@ class Habitacion():
     def get_estado(self) -> EstadoHabitacion:
         
         return self.__estado
+
+    def get_activo(self) -> bool:
+
+        return self.__activo
     
     #Getters:--------------------
 
@@ -108,5 +118,12 @@ class Habitacion():
             raise ValueError("Estado habitación inválido...")
         
         self.__estado = estado
+
+    def set_activo(self, activo: bool) -> None:
+
+        if not es_activo_valido(activo):
+            raise ValueError("Activo inválido...")
+        
+        self.__activo = activo
     
     #Setters:--------------------

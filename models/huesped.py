@@ -16,7 +16,8 @@ class Huesped(Persona):
             nombre: str, 
             apellido: str, 
             dni: str, 
-            telefono: str
+            telefono: str, 
+            activo: bool
     ) -> None:
 
-        super().__init__(id_huesped, nombre, apellido, dni, telefono)
+        super().__init__(id_huesped, nombre, apellido, dni, telefono, activo)

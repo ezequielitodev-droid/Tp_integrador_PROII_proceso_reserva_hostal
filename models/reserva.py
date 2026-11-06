@@ -10,7 +10,8 @@ from utils.validators.datavalidators import (
     es_fecha_salida_valida,
     es_rango_fechas_valido,
     es_estado_reserva_valido,
-    es_monto_total_valido
+    es_monto_total_valido, 
+    es_activo_valido
 )
 
 #Constants
@@ -26,7 +27,8 @@ class Reserva():
         fecha_ingreso: date, 
         fecha_salida: date, 
         estado: EstadoReserva, 
-        monto_total: Decimal 
+        monto_total: Decimal, 
+        activo: bool
     ) -> None:
 
         if not es_id_reserva_valido(id_reserva):
@@ -56,6 +58,10 @@ class Reserva():
             raise ValueError("Monto total inválido...")
         self.__monto_total: Decimal = monto_total
 
+        if not es_activo_valido(activo):
+            raise ValueError("Activo inválido...")
+        self.__activo: bool = activo
+
     #Getters:-------------------
 
     def get_id_reserva(self) -> int | None:
@@ -81,6 +87,10 @@ class Reserva():
     def get_monto_total(self) -> Decimal:
         
         return self.__monto_total
+
+    def get_activo(self) -> bool:
+
+        return self.__activo
 
     #Getters:-------------------
     
@@ -134,5 +144,12 @@ class Reserva():
             raise ValueError("Monto total inválido...")
         
         self.__monto_total = monto_total
+
+    def set_activo(self, activo: bool) -> None:
+
+        if not es_activo_valido(activo):
+            raise ValueError("Activo inválido...")
+        
+        self.__activo = activo
     
     #Setters:-------------------
