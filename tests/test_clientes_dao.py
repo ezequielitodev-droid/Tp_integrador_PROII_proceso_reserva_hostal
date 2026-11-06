@@ -6,6 +6,7 @@ import pytest
 from dao.db_connection import obtener_conexion
 from dao.cliente_dao import ClienteDAO
 from models.cliente import Cliente
+from loggers.logger_config import configurar_logging
 
 _contador = itertools.count(1)
 
@@ -42,6 +43,7 @@ def cliente_dao() -> ClienteDAO:
 def conexion():
     """Abre la conexión antes del test y la cierra automáticamente al terminar."""
     con = obtener_conexion()
+    configurar_logging()
     yield con
     con.commit()
     con.close()
@@ -88,6 +90,22 @@ def test_obtener_cliente_por_id_devuelve_sus_datos(cliente_dao, cliente_guardado
     assert cliente.get_telefono() == datos["telefono"]
     assert cliente.get_correo() == datos["correo"]
     assert cliente.get_activo() is True
+
+
+def test_obtener_cliente_por_dni_devuelve_sus_datos(cliente_dao, cliente_guardado, conexion):
+    id_cliente, datos = cliente_guardado
+    dni_buscado = datos["dni"]
+
+    cliente = cliente_dao.obtener_cliente_por_dni(dni_buscado, conexion_externa=conexion)
+
+    assert cliente is not None
+    assert cliente.get_id_persona() == id_cliente
+    assert cliente.get_dni() == dni_buscado
+    assert cliente.get_nombre() == datos["nombre"]
+
+
+def test_obtener_cliente_por_dni_inexistente_devuelve_none(cliente_dao, conexion):
+    assert cliente_dao.obtener_cliente_por_dni("00000000", conexion_externa=conexion) is None
 
 
 def test_obtener_cliente_por_id_inexistente_devuelve_none(cliente_dao, conexion):
