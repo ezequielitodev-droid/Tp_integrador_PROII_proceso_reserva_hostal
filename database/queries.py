@@ -37,7 +37,7 @@ UPDATE clientes SET
 WHERE id_cliente = %s
 """
 
-# Baja lógica en lugar de DELETE físico
+# Baja lógica en lugar de DELETE físico, No la usamos porque usamos la instruccion del modificar con los parametros convenientes... Lo mismo en todos los otros modelos
 instruccion_eliminar_cliente = """
 UPDATE clientes 
 SET activo = 0 
