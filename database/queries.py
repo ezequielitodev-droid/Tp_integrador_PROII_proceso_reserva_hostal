@@ -26,6 +26,12 @@ FROM clientes
 WHERE id_cliente = %s
 """
 
+instruccion_obtener_cliente_por_dni = """
+SELECT id_cliente, nombre, apellido, dni, telefono, correo, activo 
+FROM clientes 
+WHERE dni = %s
+"""
+
 instruccion_modificar_cliente = """
 UPDATE clientes SET
         nombre = COALESCE(%s, nombre),
@@ -59,7 +65,7 @@ INSERT INTO huespedes(
 VALUES(%s, %s, %s, %s, %s) 
 """
 
-instruccion_obtener_huesped = """
+instruccion_obtener_huespedes = """
 SELECT id_huesped, nombre, apellido, dni, telefono, activo 
 FROM huespedes
 """
@@ -68,6 +74,12 @@ instruccion_obtener_huesped_por_id = """
 SELECT id_huesped, nombre, apellido, dni, telefono, activo 
 FROM huespedes
 WHERE id_huesped = %s
+"""
+
+instruccion_obtener_huesped_por_dni = """
+SELECT id_huesped, nombre, apellido, dni, telefono, activo 
+FROM huespedes 
+WHERE dni = %s
 """
 
 instruccion_modificar_huesped = """
@@ -101,7 +113,7 @@ INSERT INTO habitaciones(
 VALUES(%s, %s, %s, %s, %s) 
 """
 
-instruccion_obtener_habitacion = """
+instruccion_obtener_habitaciones = """
 SELECT id_habitacion, numero, capacidad, precio_noche, estado, activo 
 FROM habitaciones
 """
@@ -145,7 +157,7 @@ INSERT INTO reservas(
 VALUES(%s, %s, %s, %s, %s, %s, %s) 
 """
 
-instruccion_obtener_reserva = """
+instruccion_obtener_reservas = """
 SELECT id_reserva, fecha_reserva, fecha_ingreso, fecha_salida, estado, monto_total, id_cliente, activo 
 FROM reservas
 """
