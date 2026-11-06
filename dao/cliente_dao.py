@@ -7,6 +7,7 @@ from database.queries import (
     instruccion_crear_cliente, 
     instruccion_obtener_clientes, 
     instruccion_obtener_cliente_por_id, 
+    instruccion_obtener_cliente_por_dni, 
     instruccion_modificar_cliente
 )
 
@@ -165,6 +166,46 @@ class ClienteDAO:
                 cursor.close()
             if debe_cerrar and conexion:
                 conexion.close()
+
+    def obtener_cliente_por_dni(self, dni: str, conexion_externa = None) -> Cliente | None:
+
+        conexion = conexion_externa or obtener_conexion()
+        debe_cerrar = conexion_externa is None
+        cursor = None
+
+        try:
+
+            cursor = conexion.cursor()
+
+            dni_limpio = dni.strip().replace(".", "")
+            
+            instruccion_sql = instruccion_obtener_cliente_por_dni
+            cursor.execute(instruccion_sql, (dni_limpio,))
+            
+            resultado = cursor.fetchone()
+            if not resultado:
+                return None
+
+            return Cliente(
+                id_cliente=resultado[0],
+                nombre=resultado[1],
+                apellido=resultado[2],
+                dni=resultado[3],
+                telefono=resultado[4],
+                correo=resultado[5],
+                activo=bool(resultado[6])
+            )
+        
+        except Exception as e:
+
+            logging.error(f"Error al buscar cliente por DNI: {e}")
+
+            return None
+        
+        finally:
+            
+            if cursor: cursor.close()
+            if debe_cerrar: conexion.close()
 
     def modificar_cliente(
             self, 
