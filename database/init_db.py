@@ -40,5 +40,5 @@ def ejecutar_archivo(nombre) -> None:
 if __name__ == "__main__":
 
     nombre = sys.argv[1] if len(sys.argv) > 1 else "schema.sql"
-    #ejecutar_archivo(nombre)
+    ejecutar_archivo(nombre)
     print(f"{nombre} ejecutado")
