@@ -280,43 +280,66 @@ stateDiagram-v2
 ```
 proceso_reserva_hostal/
 ├── backups/
-│   ├── storage/
-│   └── backup_manager.py
-├── certs
-│   └──ca.pem
-├── core/
-│   └── reserva_manager.py
+│   ├── backup_manager.py
+│   └── storage/
+├── certs/
+│   └── ca.pem
 ├── dao/
+│   ├── cliente_dao.py
 │   ├── db_connection.py
-│   └── huesped_dao.py
+│   ├── habitacion_dao.py
+│   ├── huesped_dao.py
+│   ├── reserva_dao.py
+│   ├── reservas_habitaciones_dao.py
+│   └── reservas_huespedes_dao.py
 ├── database/
-│   ├── init_db.py
+│   ├── boton_auto_destruccion.sql
+│   ├── boton_auto_destruccion_ABSOLUTO.sql  # (Sobra decir que no se ejecuta jajaja)
 │   ├── datos_prueba.sql
-│   ├── queries.sql
+│   ├── init_db.py
+│   ├── medir_latencia.py
+│   ├── queries.py
 │   └── schema.sql
-├── docs
-│   └── img
+├── docs/
+│   └── img/
 ├── loggers/
 │   └── logger_config.py
 ├── models/
-│   ├── clientes.py
-│   ├── habitaciones.py
+│   ├── cliente.py
+│   ├── habitacion.py
 │   ├── huesped.py
 │   ├── persona.py
-│   └── reservas.py
+│   └── reserva.py
 ├── reports/
 │   └── analytics.py
-├── venv/
+├── services/
+│   ├── cliente_service.py
+│   ├── habitacion_service.py
+│   ├── huesped_service.py
+│   └── reserva_service.py
+├── tests/
+│   ├── datatypes/
+│   │   ├── EstadoHabitacion.py
+│   │   └── EstadoReserva.py
+│   └── validators/
+│       └── datavalidators.py
 ├── views/
 │   ├── CLI/
 │   ├── GUI/
+│   │   ├── pages/
+│   │   │   ├── page_dashboard.py
+│   │   │   ├── page_reservas.py
+│   │   │   └── pages.ui
+│   │   ├── main_window.py
+│   │   └── ventanaMain.ui
 │   └── web/
-├── .env
+├── venv/                       # Entorno virtual local (ignorado en git)
+├── .env                        # Credenciales privadas (no se suben al repositorio)
 ├── .env.example
 ├── .gitignore
 ├── LICENSE
+├── README.md
 ├── main.py
-└── README.md
 └── requirements.txt
 ```
 
@@ -393,7 +416,7 @@ Marcar con `[x]` lo que esté terminado y probado.
 - [ ] Documentación de instalación actualizada
 - [ ] Testeo actualiizado
 - [ ] Bitacora actualzada
-- [ ] MODIFICAR EL README POR EL NUEVO CAMPO ACTIVO
+- [x] MODIFICAR EL README POR EL NUEVO CAMPO ACTIVO
 
 **Base de datos**
 - [x] Conexión a MySQL
@@ -410,12 +433,12 @@ Marcar con `[x]` lo que esté terminado y probado.
 - [x] CRUD de Reserva
 
 **Capa de Servicios y Lógica de Negocio**
-- [ ] Servicio de Cliente
-- [ ] Servicio de Huesped
-- [ ] Servicio de Habitación
-- [ ] Servicio de Reserva
-- [ ] Consulta compleja 1
-- [ ] Consulta compleja 2
+- [x] Servicio de Cliente
+- [x] Servicio de Huesped
+- [x] Servicio de Habitación
+- [x] Servicio de Reserva
+- [x] Consulta compleja 1
+- [x] Consulta compleja 2
 - [ ] Consulta compleja 3
 - [ ] Consulta compleja 4
 
@@ -438,12 +461,21 @@ Marcar con `[x]` lo que esté terminado y probado.
 - [x] Testear patron DAO huesped
 - [x] Testear patron habitacion
 - [x] Testear patron reserva
-- [ ] Testear servicio cliente
-- [ ] Testear servicio huesped
-- [ ] Testear servicio habitacion
-- [ ] Testear servicio reserva
+- [x] Testear servicio cliente
+- [x] Testear servicio huesped
+- [x] Testear servicio habitacion
+- [x] Testear servicio reserva
 
 **GUI**
+- [x] Programar el main.py para que responda a la interfaz GUI
+- [x] Diseñar modelo basico GUI
+- [ ] Diseñar modelo final GUI
+- [x] Diseñar arquitectura ventanas GUI
+- [x] Crear la ventana principal
+- [x] Crear la pagina de reservas
+- [ ] Crear la pagina de dasboar
+- [ ] Vincular acciones basicas
+- [ ] Vincular todas las acciones
 
 **Otros**
 
