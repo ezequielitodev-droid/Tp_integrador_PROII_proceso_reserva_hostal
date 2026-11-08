@@ -187,3 +187,46 @@ WHERE id_reserva = %s
 """
 
 #Instrucciones de Reservas----------------------------
+
+#Instrucciones de Reservas-Huespedes (Tabla Intermedia)----------------------------
+
+instruccion_asociar_huesped_reserva = """
+INSERT INTO reservas_x_huespedes (id_reserva, id_huesped) 
+VALUES (%s, %s)
+"""
+
+instruccion_obtener_huespedes_por_reserva = """
+SELECT h.id_huesped, h.nombre, h.apellido, h.dni, h.telefono, h.activo 
+FROM huespedes h 
+JOIN reservas_x_huespedes rh ON h.id_huesped = rh.id_huesped 
+WHERE rh.id_reserva = %s
+"""
+
+instruccion_eliminar_asociacion_reserva_huesped = """
+DELETE FROM reservas_x_huespedes 
+WHERE id_reserva = %s AND id_huesped = %s
+"""
+
+#Instrucciones de Reservas-Huespedes----------------------------
+
+
+#Instrucciones de Reservas-Habitaciones (Tabla Intermedia)--------------------------
+
+instruccion_asociar_habitacion_reserva = """
+INSERT INTO reservas_x_habitaciones (id_reserva, id_habitacion) 
+VALUES (%s, %s)
+"""
+
+instruccion_obtener_habitaciones_por_reserva = """
+SELECT hab.id_habitacion, hab.numero, hab.capacidad, hab.precio_noche, hab.estado, hab.activo 
+FROM habitaciones hab 
+JOIN reservas_x_habitaciones rh ON hab.id_habitacion = rh.id_habitacion 
+WHERE rh.id_reserva = %s
+"""
+
+instruccion_eliminar_asociacion_reserva_habitacion = """
+DELETE FROM reservas_x_habitaciones 
+WHERE id_reserva = %s AND id_habitacion = %s
+"""
+
+#Instrucciones de Reservas-Habitaciones--------------------------
