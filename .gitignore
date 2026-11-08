@@ -12,3 +12,5 @@ __pycache__/
 
 #Variables de entorno
 .env
+
+.DS_Store
