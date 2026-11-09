@@ -6,6 +6,7 @@ from PyQt5 import uic
 from PyQt5.QtCore import QObject
 
 from views.GUI.pages.page_reservas import PageReservas
+from views.GUI.pages.page_dashboard import PageDashboard
 
 #Paths:
 
@@ -34,8 +35,20 @@ class MainWindow(QMainWindow):
         #Instancio la pagina de reservas:
         self.page_reservas = PageReservas()
 
-        # La agregamos al QStackedWidget que tienes en tu ventana principal
+        # La agregamos al QStackedWidget de la ventana principal
         self.stackedWidget.addWidget(self.page_reservas)
+
+        print("Cantidad total de páginas en el stackedWidget:", self.stackedWidget.count())
+        print("Widget activo actual:", self.stackedWidget.currentIndex())
+
+        #Instanciamos la pagina del dasboard:
+        self.page_dasboard = PageDashboard()
+
+        print("Cantidad total de páginas en el stackedWidget:", self.stackedWidget.count())
+        print("Widget activo actual:", self.stackedWidget.currentIndex())
+
+        #La agregamos al QStackedWidget de la ventana principal:
+        self.stackedWidget.addWidget(self.page_dasboard)
 
         # 2. Listemos TODOS los nombres de widgets que PyQt logró leer de ese archivo
         widgets_encontrados = [w.objectName() for w in self.findChildren(QObject) if w.objectName()]
@@ -54,6 +67,6 @@ class MainWindow(QMainWindow):
         print("Cambiando a la página de Reservas...")
 
     def cambiar_pagina_dasboard(self):
-
-        self.stackedWidget.setCurrentIndex(1)
-        print("Cambiando a la pagina del Dasboard...")
+        
+        self.stackedWidget.setCurrentWidget(self.page_dasboard)
+        print("Cambiando a la página del Dashboard...")
