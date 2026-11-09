@@ -1,5 +1,6 @@
 #Entorno Virtual:
 venv/
+venv312/
 
 #Python Bytecode y cache:
 __pycache__/
@@ -14,3 +15,6 @@ __pycache__/
 .env
 
 .DS_Store
+
+#Dependencias locales de Windows
+requirements-local.txt
