@@ -33,13 +33,21 @@ class DashboardService:
     # Métodos estratégicos:
 
     def obtener_dataframe_reservas(self) -> pd.DataFrame:
+        
         """
-        Obtiene las reservas y las convierte en un DataFrame.
+        Obtiene las reservas y las convierte en un DataFrame,
+        filtrando solo las que están activas (activo = 1).
         """
-
         reservas = self.reserva_service.obtener_reservas()
+        df = convertir_reservas_dataframe(reservas)
 
-        return convertir_reservas_dataframe(reservas)
+        if df.empty:
+            return df
+
+        # Filtramos para descartar las reservas eliminadas (activo = 0 o False)
+        df_activas = df[df["activo"] == 1].copy()
+
+        return df_activas
 
     def obtener_estadisticas(self) -> dict:
         """
