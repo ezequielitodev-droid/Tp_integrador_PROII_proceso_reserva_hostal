@@ -70,9 +70,7 @@ def calcular_estadisticas(
     )
 
     # Identificamos las reservas canceladas o dadas de baja.
-    reservas_canceladas = (
-        (~df["activo"]) | estado_cancelada
-    )
+    reservas_canceladas = df["estado"].str.lower() == "cancelada"
 
     reservas_activas = ~reservas_canceladas
 
