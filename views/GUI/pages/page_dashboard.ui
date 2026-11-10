@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PageDashboard</class>
+ <widget class="QWidget" name="PageDashboard">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>900</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Panel de control</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+    QWidget {
+        background-color: #323232;
+        color: #E2E8F0;
+        font-family: Segoe UI;
+    }
+   </string>
+  </property>
+  <layout class="QVBoxLayout" name="layout_principal">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QScrollArea" name="area_desplazable">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <widget class="QWidget" name="contenido">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>884</width>
+        <height>750</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="layout_contenido">
+       <property name="spacing">
+        <number>16</number>
+       </property>
+       <property name="leftMargin">
+        <number>20</number>
+       </property>
+       <property name="topMargin">
+        <number>18</number>
+       </property>
+       <property name="rightMargin">
+        <number>20</number>
+       </property>
+       <property name="bottomMargin">
+        <number>20</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="layout_encabezado">
+         <item>
+          <layout class="QVBoxLayout" name="layout_titulos">
+           <item>
+            <widget class="QLabel" name="titulo">
+             <property name="text">
+              <string>Panel de control</string>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">font-size: 25px; font-weight: bold; color: #FFFFFF;</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="subtitulo">
+             <property name="text">
+              <string>Resumen general de reservas</string>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">font-size: 12px; color: #A0AEC0;</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="BotonActualizar">
+           <property name="styleSheet">
+            <string notr="true">
+             QPushButton {
+                 background-color: #FDB93B;
+                 color: #232323;
+                 border: none;
+                 border-radius: 7px;
+                 padding: 8px 16px;
+                 font-weight: bold;
+             }
+             QPushButton:hover {
+                 background-color: #e5a532;
+             }
+             QPushButton:pressed {
+                 background-color: #cc922b;
+             }
+            </string>
+           </property>
+           <property name="text">
+            <string>Actualizar</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="layout_tarjetas">
+         <property name="spacing">
+          <number>12</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="QFrame" name="tarjeta_total">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>105</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QFrame { background-color: #3B3B3B; border: 1px solid #232323; border-left: 4px solid #3978C5; border-radius: 9px; }</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="QLabel" name="label_tit_total">
+              <property name="text">
+               <string>Total de reservas</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font-size: 12px; font-weight: bold; color: #A0AEC0; border: none; background: transparent;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="valor_total">
+              <property name="text">
+               <string>0</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font-size: 25px; font-weight: bold; color: #FFFFFF; border: none; background: transparent;</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QFrame" name="tarjeta_activas">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>105</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QFrame { background-color: #3B3B3B; border: 1px solid #232323; border-left: 4px solid #FDB93B; border-radius: 9px; }</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QLabel" name="label_tit_activas">
+              <property name="text">
+               <string>Reservas activas</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font-size: 12px; font-weight: bold; color: #A0AEC0; border: none; background: transparent;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="valor_activas">
+              <property name="text">
+               <string>0</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font-size: 25px; font-weight: bold; color: #FFFFFF; border: none; background: transparent;</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QFrame" name="tarjeta_canceladas">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>105</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QFrame { background-color: #3B3B3B; border: 1px solid #232323; border-left: 4px solid #D65B5B; border-radius: 9px; }</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <widget class="QLabel" name="label_tit_canceladas">
+              <property name="text">
+               <string>Reservas canceladas</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font-size: 12px; font-weight: bold; color: #A0AEC0; border: none; background: transparent;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="valor_canceladas">
+              <property name="text">
+               <string>0</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font-size: 25px; font-weight: bold; color: #FFFFFF; border: none; background: transparent;</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QFrame" name="tarjeta_duracion">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>105</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QFrame { background-color: #3B3B3B; border: 1px solid #232323; border-left: 4px solid #FDB93B; border-radius: 9px; }</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_5">
+            <item>
+             <widget class="QLabel" name="label_tit_duracion">
+              <property name="text">
+               <string>Duración promedio</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font-size: 12px; font-weight: bold; color: #A0AEC0; border: none; background: transparent;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="valor_duracion">
+              <property name="text">
+               <string>0</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font-size: 25px; font-weight: bold; color: #FFFFFF; border: none; background: transparent;</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="titulo_graficos">
+         <property name="text">
+          <string>Actividad de reservas</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font-size: 18px; font-weight: bold; color: #FFFFFF;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="layout_graficos">
+         <property name="spacing">
+          <number>14</number>
+         </property>
+         <item>
+          <widget class="QFrame" name="contenedor_mes">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>300</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QFrame { background-color: #3B3B3B; border: 1px solid #232323; border-radius: 9px; }</string>
+           </property>
+           <layout class="QVBoxLayout" name="layout_g_mes">
+            <item>
+             <widget class="QLabel" name="label_g_mes">
+              <property name="text">
+               <string>Reservas por mes</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font-size: 14px; font-weight: bold; color: #FFFFFF; border: none; background: transparent;</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="contenedor_semana">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>300</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QFrame { background-color: #3B3B3B; border: 1px solid #232323; border-radius: 9px; }</string>
+           </property>
+           <layout class="QVBoxLayout" name="layout_g_semana">
+            <item>
+             <widget class="QLabel" name="label_g_semana">
+              <property name="text">
+               <string>Reservas por semana</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font-size: 14px; font-weight: bold; color: #FFFFFF; border: none; background: transparent;</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="contenedor_dia">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>300</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QFrame { background-color: #3B3B3B; border: 1px solid #232323; border-radius: 9px; }</string>
+           </property>
+           <layout class="QVBoxLayout" name="layout_g_dia">
+            <item>
+             <widget class="QLabel" name="label_g_dia">
+              <property name="text">
+               <string>Reservas por día</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font-size: 14px; font-weight: bold; color: #FFFFFF; border: none; background: transparent;</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+</ui>

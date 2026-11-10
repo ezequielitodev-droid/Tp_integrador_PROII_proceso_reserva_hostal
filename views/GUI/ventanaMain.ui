@@ -6,15 +6,23 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>700</width>
-    <height>600</height>
+    <width>950</width>
+    <height>650</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Sistema de Gestión - Hostal</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+    QMainWindow {
+        background-color: #323232;
+        font-family: Segoe UI;
+    }
+   </string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0">
+   <layout class="QHBoxLayout" name="horizontalLayout_main" stretch="0,1">
     <property name="spacing">
      <number>0</number>
     </property>
@@ -34,24 +42,19 @@
      <widget class="QFrame" name="Frame_Page_Logo">
       <property name="maximumSize">
        <size>
-        <width>190</width>
+        <width>220</width>
         <height>16777215</height>
        </size>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: 
-rgb(36, 37, 36)</string>
+       <string notr="true">
+        QFrame#Frame_Page_Logo {
+            background-color: #3B3B3B;
+            border-right: 1px solid #232323;
+        }
+       </string>
       </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <property name="lineWidth">
-       <number>2</number>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0">
+      <layout class="QVBoxLayout" name="verticalLayout_menu">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -69,100 +72,152 @@ rgb(36, 37, 36)</string>
        </property>
        <item>
         <widget class="QFrame" name="FrameLogo">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>180</height>
+           <height>150</height>
           </size>
          </property>
-         <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
-         <widget class="QLabel" name="LabelTittle">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>60</y>
-            <width>171</width>
-            <height>81</height>
-           </rect>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QLabel {
-    color: #ffffff;
-    font-size: 25pt;
-    font-weight: bold;
-    background-color: transparent;
-    padding: 6px;
-}</string>
-          </property>
-          <property name="text">
-           <string>Modulo
+         <layout class="QVBoxLayout" name="verticalLayout_logo">
+          <item>
+           <widget class="QLabel" name="LabelTittle">
+            <property name="styleSheet">
+             <string notr="true">
+              QLabel {
+                  color: #FDB93B;
+                  font-size: 18pt;
+                  font-weight: bold;
+                  background-color: transparent;
+                  font-family: Segoe UI;
+              }
+             </string>
+            </property>
+            <property name="text">
+             <string>Módulo
 Reservas</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>
         <widget class="QFrame" name="FramePages_2">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
-         <widget class="QPushButton" name="BotonPaginaReserva">
-          <property name="geometry">
-           <rect>
-            <x>13</x>
-            <y>13</y>
-            <width>161</width>
-            <height>24</height>
-           </rect>
+         <layout class="QVBoxLayout" name="verticalLayout_botones">
+          <property name="spacing">
+           <number>12</number>
           </property>
-          <property name="styleSheet">
-           <string notr="true">background-color: rgb(68, 255, 161)
-</string>
+          <property name="leftMargin">
+           <number>15</number>
           </property>
-          <property name="text">
-           <string>Reservas</string>
+          <property name="topMargin">
+           <number>20</number>
           </property>
-          <property name="flat">
-           <bool>false</bool>
+          <property name="rightMargin">
+           <number>15</number>
           </property>
-         </widget>
-         <widget class="QPushButton" name="BotonPaginaDasboard">
-          <property name="geometry">
-           <rect>
-            <x>13</x>
-            <y>51</y>
-            <width>161</width>
-            <height>24</height>
-           </rect>
+          <property name="bottomMargin">
+           <number>0</number>
           </property>
-          <property name="styleSheet">
-           <string notr="true">background-color: rgb(68, 255, 161)</string>
-          </property>
-          <property name="text">
-           <string>Dasboard</string>
-          </property>
-          <property name="flat">
-           <bool>false</bool>
-          </property>
-         </widget>
+          <item>
+           <widget class="QPushButton" name="BotonPaginaReserva">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>38</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">
+              QPushButton {
+                  background-color: #FDB93B;
+                  color: #232323;
+                  border: none;
+                  border-radius: 7px;
+                  font-weight: bold;
+                  font-size: 13px;
+                  font-family: Segoe UI;
+              }
+              QPushButton:hover {
+                  background-color: #e5a532;
+              }
+              QPushButton:pressed {
+                  background-color: #cc922b;
+              }
+             </string>
+            </property>
+            <property name="text">
+             <string>Reservas</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>1</width>
+              <height>10</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="BotonPaginaDasboard">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>38</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">
+              QPushButton {
+                  background-color: #3B3B3B;
+                  color: #E2E8F0;
+                  border: 1px solid #555555;
+                  border-radius: 7px;
+                  font-weight: bold;
+                  font-size: 13px;
+                  font-family: Segoe UI;
+              }
+              QPushButton:hover {
+                  background-color: #4A4A4A;
+                  color: #FFFFFF;
+              }
+              QPushButton:pressed {
+                  background-color: #2D2D2D;
+              }
+             </string>
+            </property>
+            <property name="text">
+             <string>Dashboard</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -170,26 +225,39 @@ Reservas</string>
     <item>
      <widget class="QFrame" name="FramePages">
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(50, 50, 50)</string>
+       <string notr="true">
+        QFrame#FramePages {
+            background-color: #323232;
+        }
+       </string>
       </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QStackedWidget" name="stackedWidget">
-       <property name="geometry">
-        <rect>
-         <x>9</x>
-         <y>9</y>
-         <width>491</width>
-         <height>541</height>
-        </rect>
+      <layout class="QVBoxLayout" name="verticalLayout_pages_container">
+       <property name="leftMargin">
+        <number>0</number>
        </property>
-       <widget class="QWidget" name="page"/>
-       <widget class="QWidget" name="page_2"/>
-      </widget>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QStackedWidget" name="stackedWidget">
+         <property name="styleSheet">
+          <string notr="true">
+           QStackedWidget {
+               background-color: #323232;
+           }
+          </string>
+         </property>
+         <widget class="QWidget" name="page"/>
+         <widget class="QWidget" name="page_2"/>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
    </layout>
@@ -199,7 +267,7 @@ Reservas</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>700</width>
+     <width>950</width>
      <height>22</height>
     </rect>
    </property>

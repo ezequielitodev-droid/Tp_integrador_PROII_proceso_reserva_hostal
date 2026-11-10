@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DialogAgregarHuesped</class>
+ <widget class="QDialog" name="DialogAgregarHuesped">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>450</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Añadir Huésped y Habitación</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+    QDialog {
+        background-color: #323232;
+        color: #FFFFFF;
+        font-family: Segoe UI;
+    }
+    QLabel {
+        color: #E2E8F0;
+        font-weight: bold;
+        font-size: 12px;
+    }
+    QLineEdit, QComboBox {
+        background-color: #FFFFFF;
+        color: #263445;
+        border: 1px solid #232323;
+        border-radius: 5px;
+        padding: 6px;
+        font-size: 12px;
+    }
+    QComboBox QAbstractItemView {
+        background-color: #2D2D2D;
+        color: #FFFFFF;
+        selection-background-color: #FDB93B;
+        selection-color: #232323;
+    }
+    QPushButton {
+        background-color: #FDB93B;
+        color: #232323;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 14px;
+        font-weight: bold;
+    }
+    QPushButton:hover {
+        background-color: #e5a532;
+    }
+    QPushButton:pressed {
+        background-color: #cc922b;
+    }
+   </string>
+  </property>
+  <layout class="QVBoxLayout" name="layout_principal">
+   <property name="spacing">
+    <number>15</number>
+   </property>
+   <property name="leftMargin">
+    <number>20</number>
+   </property>
+   <property name="topMargin">
+    <number>20</number>
+   </property>
+   <property name="rightMargin">
+    <number>20</number>
+   </property>
+   <property name="bottomMargin">
+    <number>20</number>
+   </property>
+
+   <!-- TÍTULO -->
+   <item>
+    <widget class="QLabel" name="label_titulo">
+     <property name="text">
+      <string>Información del Huésped</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font-size: 16px; color: #FDB93B;</string>
+     </property>
+    </widget>
+   </item>
+
+   <!-- FORMULARIO DE DATOS -->
+   <item>
+    <layout class="QGridLayout" name="grid_formulario">
+     <item row="0" column="0">
+      <widget class="QLabel" name="lbl_nombre"><property name="text"><string>Nombre:</string></property></widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="input_huesped_nombre"/>
+     </item>
+
+     <item row="1" column="0">
+      <widget class="QLabel" name="lbl_apellido"><property name="text"><string>Apellido:</string></property></widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="input_huesped_apellido"/>
+     </item>
+
+     <item row="2" column="0">
+      <widget class="QLabel" name="lbl_dni"><property name="text"><string>DNI:</string></property></widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="input_huesped_dni"/>
+     </item>
+
+     <item row="3" column="0">
+      <widget class="QLabel" name="lbl_telefono"><property name="text"><string>Teléfono:</string></property></widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="input_huesped_telefono"/>
+     </item>
+
+     <item row="4" column="0">
+      <widget class="QLabel" name="lbl_habitacion"><property name="text"><string>Habitación:</string></property></widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QComboBox" name="combo_habitaciones"/>
+     </item>
+    </layout>
+   </item>
+
+   <!-- ESPACIADOR -->
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation"><enum>Qt::Vertical</enum></property>
+     <property name="sizeHint" stdset="0"><size><width>20</width><height>40</height></size></property>
+    </spacer>
+   </item>
+
+   <!-- BOTONES DE ACCIÓN -->
+   <item>
+    <layout class="QHBoxLayout" name="layout_botones">
+     <item>
+      <spacer name="spacer_botones">
+       <property name="orientation"><enum>Qt::Horizontal</enum></property>
+       <property name="sizeHint" stdset="0"><size><width>40</width><height>20</height></size></property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_cancelar">
+       <property name="styleSheet">
+        <string notr="true">
+         QPushButton { background-color: #4A4A4A; color: #FFFFFF; border: 1px solid #555555; }
+         QPushButton:hover { background-color: #555555; }
+        </string>
+       </property>
+       <property name="text">
+        <string>Cancelar</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_aceptar">
+       <property name="styleSheet">
+        <string notr="true">
+         QPushButton { background-color: #FDB93B; color: #232323; }
+         QPushButton:hover { background-color: #e5a532; }
+        </string>
+       </property>
+       <property name="text">
+        <string>Aceptar</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
