@@ -2,16 +2,32 @@
 
 import sys
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
-# Importamos tu módulo de configuración de logs (ajusta la ruta si es necesario)
+# Determinamos la ruta base dependiendo de si estamos compilados o en desarrollo
+if hasattr(sys, 'frozen'):
+    BASE_DIR = Path(sys.executable).resolve().parent
+else:
+    BASE_DIR = Path(__file__).resolve().parent
+
+# Cargamos el .env explícitamente desde la ruta base del ejecutable o script
+ruta_env = BASE_DIR / ".env"
+load_dotenv(dotenv_path=ruta_env)
+
+# Importamos tu módulo de configuración de logs
 from loggers.logger_config import configurar_logging
 
-#Globals Call:
-load_dotenv()
+def asegurar_directorios_trabajo():
+    """Asegura que existan las carpetas de logs y backups locales junto al ejecutable o script."""
+    (BASE_DIR / "logs").mkdir(parents=True, exist_ok=True)
+    (BASE_DIR / "backups" / "storage").mkdir(parents=True, exist_ok=True)
 
 def main():
     
+    # 0. Aseguramos la existencia de directorios críticos de escritura antes de activar los logs
+    asegurar_directorios_trabajo()
+
     # 1. Activamos los parlantes y archivos de log antes de levantar nada
     configurar_logging()
 
@@ -19,7 +35,7 @@ def main():
 
     if interfaz == "gui":
 
-        #Importamos localmente:
+        # Importamos localmente:
         from PyQt5.QtWidgets import QApplication
         from views.GUI.main_window import MainWindow
         
@@ -29,11 +45,11 @@ def main():
         sys.exit(app.exec_())
 
     elif interfaz == "web":
-        #Aqui iria una futura vinculacion con WEB...
+        # Aqui iria una futura vinculacion con WEB...
         print("Módulo WEB en desarrollo...")
 
     elif interfaz == "cli":
-        #Aqui iria una futura vinculacion CLI...
+        # Aqui iria una futura vinculacion CLI...
         print("Lanzando interfaz de comandos...")
         
     else:
