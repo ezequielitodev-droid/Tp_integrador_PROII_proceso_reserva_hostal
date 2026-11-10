@@ -1,14 +1,20 @@
-#Imports:
+# Imports:
 
 import sys
 import os
 from dotenv import load_dotenv
+
+# Importamos tu módulo de configuración de logs (ajusta la ruta si es necesario)
+from loggers.logger_config import configurar_logging
 
 #Globals Call:
 load_dotenv()
 
 def main():
     
+    # 1. Activamos los parlantes y archivos de log antes de levantar nada
+    configurar_logging()
+
     interfaz = os.getenv("APP_INTERFACE", "gui").lower()
 
     if interfaz == "gui":
