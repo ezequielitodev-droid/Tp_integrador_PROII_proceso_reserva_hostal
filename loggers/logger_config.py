@@ -1,32 +1,69 @@
-#Imports:
+# Imports:
 
 import logging
 from pathlib import Path
 
 # Paths:
 RAIZ = Path(__file__).resolve().parent.parent
-PATH_LOG = RAIZ / "logs" / "app.log"
+FOLDER_LOGS = RAIZ / "logs"
+PATH_LOG_DAOS = FOLDER_LOGS / "dao_logs.log"
+PATH_LOG_SERVICES = FOLDER_LOGS / "service_logs.log"
+PATH_LOG_GUI = FOLDER_LOGS / "gui_logs.log"
 
-#Modulo instrumental:
+
+# Modulo instrumental:
 
 def configurar_logging() -> None:
-    
-    PATH_LOG.parent.mkdir(parents=True, exist_ok=True)
 
-    raiz = logging.getLogger()
-    raiz.setLevel(logging.INFO)
+    # Creamos la carpeta de logs si no existe
+    FOLDER_LOGS.mkdir(parents=True, exist_ok=True)
 
-    if raiz.handlers:
-        raiz.handlers.clear()
-
-    handler_app = logging.FileHandler(PATH_LOG, encoding="utf-8")
-    handler_app.setLevel(logging.INFO)
-    
+    # Formato común para todos los logs
     formato = logging.Formatter("%(asctime)s: [%(levelname)s] --- %(name)s ---> [%(message)s]")
-    handler_app.setFormatter(formato)
-    raiz.addHandler(handler_app)
 
+    # 1. Configurar Handler para Consola
     handler_consola = logging.StreamHandler()
     handler_consola.setLevel(logging.INFO)
     handler_consola.setFormatter(formato)
-    raiz.addHandler(handler_consola)
+
+    # 2. Configurar Handler y Logger específico para DAOs
+    logger_dao = logging.getLogger("dao")
+    logger_dao.setLevel(logging.INFO)
+    logger_dao.propagate = False  # Evita que se dupliquen los mensajes en el root
+    if logger_dao.handlers:
+        logger_dao.handlers.clear()
+    
+    handler_dao = logging.FileHandler(PATH_LOG_DAOS, encoding="utf-8")
+    handler_dao.setLevel(logging.INFO)
+    handler_dao.setFormatter(formato)
+    
+    logger_dao.addHandler(handler_dao)
+    logger_dao.addHandler(handler_consola)  # También imprime DAOs por consola
+
+    # 3. Configurar Handler y Logger específico para Services
+    logger_service = logging.getLogger("services")
+    logger_service.setLevel(logging.INFO)
+    logger_service.propagate = False
+    if logger_service.handlers:
+        logger_service.handlers.clear()
+    
+    handler_service = logging.FileHandler(PATH_LOG_SERVICES, encoding="utf-8")
+    handler_service.setLevel(logging.INFO)
+    handler_service.setFormatter(formato)
+    
+    logger_service.addHandler(handler_service)
+    logger_service.addHandler(handler_consola)  # También imprime Servicios por consola
+
+    # 4. Configurar Handler y Logger específico para GUI
+    logger_gui = logging.getLogger("views") # O "gui" dependiendo de cómo nombres tu paquete de vistas
+    logger_gui.setLevel(logging.INFO)
+    logger_gui.propagate = False
+    if logger_gui.handlers:
+        logger_gui.handlers.clear()
+    
+    handler_gui = logging.FileHandler(PATH_LOG_GUI, encoding="utf-8")
+    handler_gui.setLevel(logging.INFO)
+    handler_gui.setFormatter(formato)
+    
+    logger_gui.addHandler(handler_gui)
+    logger_gui.addHandler(handler_consola)  # También imprime GUI por consola

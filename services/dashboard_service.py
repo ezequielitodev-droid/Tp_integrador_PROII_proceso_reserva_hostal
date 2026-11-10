@@ -14,7 +14,7 @@ from reports.analytics import (
 
 # Global Variables:
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("services.dashboard_service")
 
 
 # Class:
@@ -38,15 +38,18 @@ class DashboardService:
         Obtiene las reservas y las convierte en un DataFrame,
         filtrando solo las que están activas (activo = 1).
         """
+        logger.info("Solicitando datos para generar DataFrame de reservas en el dashboard.")
         reservas = self.reserva_service.obtener_reservas()
         df = convertir_reservas_dataframe(reservas)
 
         if df.empty:
+            logger.warning("El DataFrame de reservas devuelto está vacío.")
             return df
 
         # Filtramos para descartar las reservas eliminadas (activo = 0 o False)
         df_activas = df[df["activo"] == 1].copy()
-
+        
+        logger.info(f"DataFrame generado con éxito. Total de reservas activas procesadas: {len(df_activas)}")
         return df_activas
 
     def obtener_estadisticas(self) -> dict:
@@ -54,7 +57,10 @@ class DashboardService:
         Obtiene las reservas y calcula las estadísticas
         necesarias para el dashboard.
         """
-
+        logger.info("Calculando estadísticas generales para el dashboard.")
         df = self.obtener_dataframe_reservas()
 
-        return calcular_estadisticas(df)
+        estadisticas = calcular_estadisticas(df)
+        logger.info("Estadísticas del dashboard calculadas exitosamente.")
+
+        return estadisticas

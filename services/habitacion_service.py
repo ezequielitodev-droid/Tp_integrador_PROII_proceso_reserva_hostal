@@ -16,7 +16,8 @@ from utils.validators.datavalidators import (
 
 # Global Variables:
 
-logger = logging.getLogger(__name__)
+# Apuntamos al parlante específico de la capa de Servicios
+logger = logging.getLogger("services.habitacion_service")
 
 # Class:
 
@@ -80,14 +81,21 @@ class HabitacionService:
             activo=True
         )
 
-        return self.habitacion_dao.crear_habitacion(nueva_habitacion)
+        id_generado = self.habitacion_dao.crear_habitacion(nueva_habitacion)
+        
+        if id_generado:
+            logger.info(f"Servicio procesó y creó con éxito la habitación con ID: {id_generado}")
+
+        return id_generado
 
     def obtener_habitaciones(self) -> list[Habitacion | None]:
         """Obtiene el listado completo de habitaciones."""
+        logger.info("Solicitud para obtener listado completo de habitaciones.")
         return self.habitacion_dao.obtener_habitaciones()
 
     def obtener_habitacion_por_id(self, id_habitacion: int) -> Habitacion | None:
         """Busca una habitación específica por su ID."""
+        logger.info(f"Solicitud para obtener habitación por ID: {id_habitacion}")
         return self.habitacion_dao.obtener_habitacion_por_id(id_habitacion)
 
     def modificar_habitacion(
@@ -115,6 +123,7 @@ class HabitacionService:
             if not es_estado_valido(estado_enum):
                 raise ValueError("El estado proporcionado no es válido.")
 
+        logger.info(f"Solicitud para modificar atributos de la habitación ID: {id_habitacion}")
         return self.habitacion_dao.modificar_habitacion(
             id_habitacion=id_habitacion,
             numero=numero,
@@ -126,4 +135,5 @@ class HabitacionService:
 
     def eliminar_habitacion(self, id_habitacion: int) -> bool:
         """Realiza la baja lógica de la habitación (activo = False)."""
+        logger.info(f"Solicitud para eliminar (baja lógica) habitación con ID: {id_habitacion}")
         return self.habitacion_dao.eliminar_habitacion(id_habitacion)

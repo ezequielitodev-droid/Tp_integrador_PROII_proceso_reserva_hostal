@@ -16,7 +16,8 @@ from utils.validators.datavalidators import (
 
 # Global Variables:
 
-logger = logging.getLogger(__name__)
+# Apuntamos al parlante específico de la capa de Servicios
+logger = logging.getLogger("services.huesped_service")
 
 # Class:
 
@@ -78,21 +79,26 @@ class HuespedService:
         )
 
         id_generado = self.huesped_dao.crear_huesped(nuevo_huesped)
+        
+        if id_generado:
+            logger.info(f"Servicio procesó y creó con éxito el huésped con ID: {id_generado}")
 
         return id_generado
 
     def obtener_huespedes(self) -> list[Huesped | None]:
+        logger.info("Solicitud para obtener listado completo de huéspedes.")
         return self.huesped_dao.obtener_huespedes()
 
     def obtener_huesped_por_id(self, id_huesped: int) -> Huesped | None:
+        logger.info(f"Solicitud para obtener huésped por ID: {id_huesped}")
         return self.huesped_dao.obtener_huesped_por_id(id_huesped)
 
     def obtener_huesped_por_dni(self, dni: str) -> Huesped | None:
         dni_limpio = dni.strip().replace(".", "")
+        logger.info(f"Solicitud para obtener huésped por DNI.")
         return self.huesped_dao.obtener_huesped_por_dni(dni_limpio)
 
     def eliminar_huesped(self, id_huesped: int) -> bool:
-
-        #Pendiende validar, nececito una consulta compleja
-
+        # Pendiente validar, necesito una consulta compleja
+        logger.info(f"Solicitud para eliminar (baja lógica) huésped con ID: {id_huesped}")
         return self.huesped_dao.eliminar_huesped(id_huesped)

@@ -11,7 +11,7 @@ from database.queries import (
 
 # Global Variables:
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("dao.reservas_huespedes_dao")
 
 # Constants:
 

@@ -1,6 +1,6 @@
 # Imports:
-
 import logging
+
 from models.cliente import Cliente
 from dao.cliente_dao import ClienteDAO
 from utils.validators.datavalidators import (
@@ -15,7 +15,8 @@ from utils.validators.datavalidators import (
 
 # Global Variables:
 
-logger = logging.getLogger(__name__)
+# Apuntamos al parlante específico de la capa de Servicios
+logger = logging.getLogger("services.cliente_service")
 
 # Class:
 
@@ -63,6 +64,7 @@ class ClienteService:
         cliente_existente = self.cliente_dao.obtener_cliente_por_dni(dni_limpio)
 
         if cliente_existente and cliente_existente.get_activo():
+            # Usamos el logger de la capa de servicios
             logger.warning(f"Intento de registrar cliente con DNI duplicado: {dni_limpio}")
             raise ValueError(f"Ya existe un cliente activo con el DNI {dni}")
 
@@ -77,14 +79,20 @@ class ClienteService:
         )
 
         id_generado = self.cliente_dao.crear_cliente(nuevo_cliente)
+        
+        if id_generado:
+            logger.info(f"Servicio procesó y creó con éxito el cliente con ID: {id_generado}")
 
         return id_generado
 
     def obtener_clientes(self) -> list[Cliente | None]:
+        logger.info("Solicitud para obtener listado completo de clientes.")
         return self.cliente_dao.obtener_clientes()
 
     def obtener_cliente_por_id(self, id_cliente: int) -> Cliente | None:
+        logger.info(f"Solicitud para obtener cliente por ID: {id_cliente}")
         return self.cliente_dao.obtener_cliente_por_id(id_cliente)
         
     def eliminar_cliente(self, id_cliente: int) -> bool:
+        logger.info(f"Solicitud para eliminar (baja lógica) cliente con ID: {id_cliente}")
         return self.cliente_dao.eliminar_cliente(id_cliente)

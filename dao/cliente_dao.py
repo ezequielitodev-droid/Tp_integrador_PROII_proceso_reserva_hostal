@@ -13,7 +13,7 @@ from database.queries import (
 
 #Global Variables:
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("dao.cliente_dao")
 
 #Constants:
 
