@@ -141,6 +141,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="BotonDetalles">
+        <property name="text">
+         <string>Detalles</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="BotonEliminar">
         <property name="styleSheet">
          <string notr="true">

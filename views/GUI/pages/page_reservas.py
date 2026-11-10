@@ -7,12 +7,13 @@ from PyQt5 import uic
 
 from views.GUI.dialogs.dialog_crear_reserva import DialogCrearReserva
 from views.GUI.dialogs.dialog_modificar_reserva import DialogModificarReserva
+from views.GUI.dialogs.dialog_detalles_reserva import DialogDetallesReserva
 
 from services.cliente_service import ClienteService
 from services.huesped_service import HuespedService
 from services.habitacion_service import HabitacionService
 from services.reserva_service import ReservaService
-from utils.datatypes.EstadoReserva import EstadoReserva  # Ajusta la ruta si es necesario
+from utils.datatypes.EstadoReserva import EstadoReserva
 
 #Constants:
 
@@ -58,6 +59,7 @@ class PageReservas(QWidget):
     def init_ui_connections(self):
         self.BotonAgregar.clicked.connect(self.agregar_una_reserva)
         self.BotonModificar.clicked.connect(self.modificar_reserva_seleccionada)
+        self.BotonDetalles.clicked.connect(self.ver_detalles_reserva)
         self.BotonEliminar.clicked.connect(self.eliminar_reserva_seleccionada)
         logger.info("Conexiones de botones en PageReservas inicializadas.")
 
@@ -251,6 +253,49 @@ class PageReservas(QWidget):
                 self, 
                 "Error", 
                 f"No se pudo modificar la reserva:\n{e}"
+            )
+
+    def ver_detalles_reserva(self):
+        """Abre la ventana modal elegante con la información completa de la reserva seleccionada."""
+        item_seleccionado = self.listWidget.currentItem()
+
+        if not item_seleccionado:
+            print("Por favor, selecciona una reserva de la lista para ver sus detalles.")
+            logger.warning("Intento de ver detalles sin haber seleccionado ningún ítem en la lista.")
+            QMessageBox.warning(self, "Selección requerida", "Por favor, selecciona una reserva de la lista para ver sus detalles.")
+            return
+
+        reserva_id = item_seleccionado.data(32)
+
+        try:
+            # Invocamos al servicio centralizado para obtener toda la estructura de la reserva
+            detalles_completos = self.servicio_reserva.obtener_detalles_completos_reserva(reserva_id)
+
+            reserva_obj = detalles_completos.get("reserva")
+            cliente_obj = detalles_completos.get("cliente")
+            huespedes_lista = detalles_completos.get("huespedes", [])
+
+            if not reserva_obj:
+                QMessageBox.warning(self, "Error", "No se encontró la información detallada de la reserva.")
+                return
+
+            # Instanciamos el diálogo modal profesional pasando los objetos reales
+            dialog = DialogDetallesReserva(
+                reserva_obj=reserva_obj,
+                cliente_obj=cliente_obj,
+                lista_huespedes_detalle=huespedes_lista,
+                parent=self
+            )
+            dialog.exec_()
+            logger.info(f"Visualización de detalles abierta para la reserva ID #{reserva_id}.")
+
+        except Exception as e:
+            print(f"Error al mostrar detalles de la reserva: {e}")
+            logger.error(f"Error crítico al mostrar detalles de la reserva ID {reserva_id} desde la GUI: {e}")
+            QMessageBox.warning(
+                self, 
+                "Error", 
+                f"No se pudieron cargar los detalles:\n{e}"
             )
 
     def eliminar_reserva_seleccionada(self):

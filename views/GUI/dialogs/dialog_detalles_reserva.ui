@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DialogDetallesReserva</class>
+ <widget class="QDialog" name="DialogDetallesReserva">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>600</width>
+    <height>520</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Detalles de la Reserva</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+    QDialog {
+        background-color: #323232;
+        color: #FFFFFF;
+        font-family: Segoe UI;
+    }
+    QLabel {
+        color: #E2E8F0;
+        font-size: 12px;
+    }
+    QFrame {
+        background-color: #3B3B3B;
+        border: 1px solid #232323;
+        border-radius: 8px;
+    }
+    QTableWidget {
+        background-color: #2D2D2D;
+        color: #FFFFFF;
+        gridline-color: #444444;
+        border: 1px solid #444444;
+        border-radius: 6px;
+    }
+    QHeaderView::section {
+        background-color: #3B3B3B;
+        color: #FDB93B;
+        padding: 6px;
+        border: none;
+        font-weight: bold;
+    }
+    QPushButton {
+        background-color: #FDB93B;
+        color: #232323;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 16px;
+        font-weight: bold;
+    }
+    QPushButton:hover {
+        background-color: #e5a532;
+    }
+   </string>
+  </property>
+  <layout class="QVBoxLayout" name="layout_principal">
+   <property name="spacing">
+    <number>15</number>
+   </property>
+   <property name="leftMargin">
+    <number>20</number>
+   </property>
+   <property name="topMargin">
+    <number>20</number>
+   </property>
+   <property name="rightMargin">
+    <number>20</number>
+   </property>
+   <property name="bottomMargin">
+    <number>20</number>
+   </property>
+
+   <!-- TÍTULO -->
+   <item>
+    <widget class="QLabel" name="label_titulo">
+     <property name="text">
+      <string>Información Completa de la Reserva</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font-size: 18px; color: #FDB93B; font-weight: bold;</string>
+     </property>
+    </widget>
+   </item>
+
+   <!-- DATOS GENERALES Y CLIENTE -->
+   <item>
+    <widget class="QFrame" name="frame_info">
+     <layout class="QVBoxLayout" name="verticalLayout_info">
+      <item>
+       <layout class="QHBoxLayout" name="layout_datos_grid">
+        <item>
+         <layout class="QVBoxLayout" name="col_1">
+          <item>
+           <widget class="QLabel" name="lbl_reserva_id">
+            <property name="text"><string><b>Reserva ID:</b> # -</string></property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lbl_cliente_nombre">
+            <property name="text"><string><b>Titular:</b> -</string></property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lbl_cliente_dni">
+            <property name="text"><string><b>DNI:</b> -</string></property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="col_2">
+          <item>
+           <widget class="QLabel" name="lbl_fechas">
+            <property name="text"><string><b>Estadía:</b> - al -</string></property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lbl_monto">
+            <property name="text"><string><b>Monto Total:</b> $ 0.00</string></property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lbl_estado">
+            <property name="text"><string><b>Estado:</b> -</string></property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+
+   <!-- TABLA DE HUÉSPEDES / HABITACIONES ASOCIADAS -->
+   <item>
+    <widget class="QLabel" name="label_huespedes_titulo">
+     <property name="text">
+      <string>Huéspedes y Habitaciones Asociadas:</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font-weight: bold; color: #E2E8F0;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="table_detalles_huespedes">
+     <property name="rowCount">
+      <number>0</number>
+     </property>
+     <property name="columnCount">
+      <number>5</number>
+     </property>
+     <column><property name="text"><string>Nombre y Apellido</string></property></column>
+     <column><property name="text"><string>DNI</string></property></column>
+     <column><property name="text"><string>Teléfono</string></property></column>
+     <column><property name="text"><string>Habitación</string></property></column>
+     <column><property name="text"><string>Precio / Noche</string></property></column>
+    </widget>
+   </item>
+
+   <!-- BOTÓN CERRAR -->
+   <item>
+    <layout class="QHBoxLayout" name="layout_botones">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation"><enum>Qt::Horizontal</enum></property>
+       <property name="sizeHint" stdset="0"><size><width>40</width><height>20</height></size></property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_cerrar">
+       <property name="text">
+        <string>Cerrar</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+</ui>
