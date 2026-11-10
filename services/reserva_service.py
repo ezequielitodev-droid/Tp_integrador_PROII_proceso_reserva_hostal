@@ -233,6 +233,42 @@ class ReservaService:
         logger.info(f"Solicitud para obtener reserva por ID: {id_reserva}")
         return self.reserva_dao.obtener_reserva_por_id(id_reserva, conexion_externa=conexion_externa)
 
+    def obtener_detalles_completos_reserva(self, id_reserva: int, conexion_externa = None) -> dict:
+        """
+        Retorna la estructura completa (diccionario) para la ventana de detalles:
+        Reserva, Cliente Titular y Lista de Huéspedes/Habitaciones.
+        """
+        logger.info(f"Solicitud para obtener detalles completos de la reserva ID: {id_reserva}")
+
+        # 1. Obtenemos el objeto reserva específico por su ID
+        reserva_obj = self.obtener_reserva_por_id(id_reserva, conexion_externa=conexion_externa)
+        
+        # 2. Obtenemos el id_cliente asociado recorriendo el listado general (asegurando conversión a int)
+        id_cliente = None
+        todas_las_reservas = self.obtener_reservas()
+        for item in todas_las_reservas:
+            if item and item[0]:
+                r_obj, id_cli = item
+                if r_obj.get_id_reserva() == id_reserva:
+                    id_cliente = id_cli
+                    break
+
+        # 3. Obtenemos el cliente titular usando el DAO de clientes
+        cliente_obj = None
+        if id_cliente:
+            cliente_obj = self.cliente_dao.obtener_cliente_por_id(int(id_cliente), conexion_externa=conexion_externa)
+
+        # 4. Obtenemos la lista de huéspedes y habitaciones mediante el DAO de reservas
+        huespedes_lista = []
+        if hasattr(self.reserva_dao, "obtener_detalles_completos_por_reserva"):
+            huespedes_lista = self.reserva_dao.obtener_detalles_completos_por_reserva(id_reserva, conexion_externa=conexion_externa)
+
+        return {
+            "reserva": reserva_obj,
+            "cliente": cliente_obj,
+            "huespedes": huespedes_lista
+        }
+
     def modificar_reserva(
             self, 
             id_reserva: int, 
