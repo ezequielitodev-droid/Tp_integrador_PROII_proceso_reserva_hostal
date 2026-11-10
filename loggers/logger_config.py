@@ -9,6 +9,7 @@ FOLDER_LOGS = RAIZ / "logs"
 PATH_LOG_DAOS = FOLDER_LOGS / "dao_logs.log"
 PATH_LOG_SERVICES = FOLDER_LOGS / "service_logs.log"
 PATH_LOG_GUI = FOLDER_LOGS / "gui_logs.log"
+PATH_LOG_BACKUPS = FOLDER_LOGS / "backup_logs.log"  # <--- Nuevo path para backups
 
 
 # Modulo instrumental:
@@ -67,3 +68,17 @@ def configurar_logging() -> None:
     
     logger_gui.addHandler(handler_gui)
     logger_gui.addHandler(handler_consola)  # También imprime GUI por consola
+
+    # 5. Configurar Handler y Logger específico para Backups
+    logger_backup = logging.getLogger("backups")
+    logger_backup.setLevel(logging.INFO)
+    logger_backup.propagate = False
+    if logger_backup.handlers:
+        logger_backup.handlers.clear()
+    
+    handler_backup = logging.FileHandler(PATH_LOG_BACKUPS, encoding="utf-8")
+    handler_backup.setLevel(logging.INFO)
+    handler_backup.setFormatter(formato)
+    
+    logger_backup.addHandler(handler_backup)
+    logger_backup.addHandler(handler_consola)  # También imprime Backups por consola

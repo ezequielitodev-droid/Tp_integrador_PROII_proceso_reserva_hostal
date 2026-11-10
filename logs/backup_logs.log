@@ -1,0 +1,3 @@
+2026-11-09 23:37:08,963: [INFO] --- backups.backup_manager ---> [Copia de seguridad generada con éxito en: /Users/EzequielDev/CostillaDev/proceso_reserva_hostal/backups/storage/backup_hostal_2026-11-09_23-37-08.json]
+2026-11-09 23:43:11,453: [INFO] --- backups.backup_manager ---> [Base de datos restaurada exitosamente desde el archivo JSON.]
+2026-11-09 23:49:11,363: [INFO] --- backups.backup_manager ---> [Base de datos restaurada exitosamente desde el archivo JSON.]
