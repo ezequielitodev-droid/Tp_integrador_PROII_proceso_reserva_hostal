@@ -304,6 +304,11 @@ proceso_reserva_hostal/
 │   └── img/
 ├── loggers/
 │   └── logger_config.py
+├── logs/
+│   └── dao_logs.py
+│   └── service_logs.py
+│   └── gui_logs.py
+│   └── backup_logs.py
 ├── models/
 │   ├── cliente.py
 │   ├── habitacion.py
@@ -318,6 +323,21 @@ proceso_reserva_hostal/
 │   ├── huesped_service.py
 │   └── reserva_service.py
 ├── tests/
+│   └── test_cliente.py
+│   └── test_huesped.py
+│   └── test_habitacion.py
+│   └── test_reserva.py
+│   └── test_cliente_dao.py
+│   └── test_huesped_dao.py
+│   └── test_habitacion_dao.py
+│   └── test_reserva_dao.py
+│   └── test_reservas_huespedes_dao.py
+│   └── test_reservas_habitaciones_dao.py
+│   └── test_cliente_service.py
+│   └── test_huesped_service.py
+│   └── test_habitacion_service.py
+│   └── test_reserva_service.py
+├── utils/
 │   ├── datatypes/
 │   │   ├── EstadoHabitacion.py
 │   │   └── EstadoReserva.py
@@ -326,12 +346,26 @@ proceso_reserva_hostal/
 ├── views/
 │   ├── CLI/
 │   ├── GUI/
+│   │   ├── __pycache__/
+│   │   ├── dialogs/
+│   │   │   ├── __pycache__/
+│   │   │   ├── dialog_crear_reserva.ui
+│   │   │   ├── dialog_agregar_huesped.ui
+│   │   │   └── dialog_modificar_reserva.ui
+│   │   │   ├── dialog_detalles_reserva.ui
+│   │   │   ├── dialog_crear_reserva.py
+│   │   │   ├── dialog_agregar_huesped.py
+│   │   │   ├── dialog_modificar_reserva.py
+│   │   │   ├── dialog_detalles_reserva.py
 │   │   ├── pages/
-│   │   │   ├── page_dashboard.py
+│   │   │   ├── __pycache__/
+│   │   │   └── page_reservas.ui
+│   │   │   ├── page_dashboard.ui
 │   │   │   ├── page_reservas.py
-│   │   │   └── pages.ui
-│   │   ├── main_window.py
-│   │   └── ventanaMain.ui
+│   │   │   ├── page_dashboard.py
+│   │   ├── __init__.py
+│   │   ├── ventanaMain.ui
+│   │   └── main_window.py
 │   └── web/
 ├── venv/                       # Entorno virtual local (ignorado en git)
 ├── .env                        # Credenciales privadas (no se suben al repositorio)
@@ -439,14 +473,14 @@ Marcar con `[x]` lo que esté terminado y probado.
 - [x] Servicio de Reserva
 - [x] Consulta compleja 1
 - [x] Consulta compleja 2
-- [ ] Consulta compleja 3
-- [ ] Consulta compleja 4
+- [x] Consulta compleja 3
+- [x] Consulta compleja 4
 
 **Reportes y backups**
-- [ ] Reportes en JSON y texto
-- [ ] Gráficos con Matplotlib
-- [ ] Backup en JSON
-- [ ] Restauración desde JSON
+- [x] Reportes en JSON y texto
+- [x] Gráficos con Matplotlib
+- [x] Backup en JSON
+- [x] Restauración desde JSON
 
 **Testeos**
 
@@ -469,20 +503,20 @@ Marcar con `[x]` lo que esté terminado y probado.
 **GUI**
 - [x] Programar el main.py para que responda a la interfaz GUI
 - [x] Diseñar modelo basico GUI
-- [ ] Diseñar modelo final GUI
+- [x] Diseñar modelo final GUI
 - [x] Diseñar arquitectura ventanas GUI
 - [x] Crear la ventana principal
 - [x] Crear la pagina de reservas
-- [ ] Crear la pagina de dasboar
-- [ ] Vincular acciones basicas
-- [ ] Vincular todas las acciones
+- [x] Crear la pagina de dashboard
+- [x] Vincular acciones basicas
+- [x] Vincular todas las acciones
 
 **Otros**
 
 - [x] Llenar .env.example para tener la un ejemplo documentado
 - [x] Logging configurado
-- [ ] Logging utilizado completamente
-- [ ] Excepciones propias
+- [x] Logging utilizado completamente
 - [x] Modelos (herencia, polimorfismo, encapsulamiento)
+- [ ] Limpiar codigo de comentarios basura y prints a terminal
 
 **Cierre**
