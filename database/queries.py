@@ -230,3 +230,14 @@ WHERE id_reserva = %s AND id_habitacion = %s
 """
 
 #Instrucciones de Reservas-Habitaciones--------------------------
+
+#Instucciones de Reservas-Huespedes------------------------------
+
+instruccion_obtener_habitaciones_detalladas_por_reserva = """
+SELECT hab.id_habitacion, hab.numero, hab.capacidad, hab.precio_noche, hab.estado, hab.activo 
+FROM habitaciones hab 
+JOIN reservas_x_habitaciones rh ON hab.id_habitacion = rh.id_habitacion 
+WHERE rh.id_reserva = %s
+"""
+
+#Instucciones de Reservas-Huespedes------------------------------
