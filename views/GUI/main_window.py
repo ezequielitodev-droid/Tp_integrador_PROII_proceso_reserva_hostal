@@ -1,13 +1,13 @@
 # Imports:
-
 import logging
 from pathlib import Path
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QMessageBox, QFileDialog
 from PyQt5 import uic
 from PyQt5.QtCore import QObject
 
 from views.GUI.pages.page_reservas import PageReservas
 from views.GUI.pages.page_dashboard import PageDashboard
+from backups.backup_manager import BackupManager
 
 #Paths:
 
@@ -72,7 +72,11 @@ class MainWindow(QMainWindow):
         # Le paso los botones para cambiar a la páginas correspondientes:
         self.BotonPaginaReserva.clicked.connect(self.cambiar_pagina_reservas)
         self.BotonPaginaDasboard.clicked.connect(self.cambiar_pagina_dasboard)
-        logger.info("Conexiones de señales y slots de navegación inicializadas.")
+        
+        # Conexión del nuevo botón de Restaurar en el menú lateral
+        self.BotonRestaurar.clicked.connect(self.restaurar_base_datos_gui)
+        
+        logger.info("Conexiones de señales y slots de navegación e infraestructura inicializadas.")
 
     #Metodos de funcion: 
     def cambiar_pagina_reservas(self):
@@ -84,3 +88,49 @@ class MainWindow(QMainWindow):
         self.stackedWidget.setCurrentWidget(self.page_dasboard)
         print("Cambiando a la página del Dashboard...")
         logger.info("Usuario navegó hacia la página del Dashboard.")
+
+    def restaurar_base_datos_gui(self):
+        """Abre un explorador de archivos para seleccionar un JSON de respaldo, restaura la BD y reinicia la app."""
+        confirmacion = QMessageBox.warning(
+            self,
+            "Advertencia de Restauración",
+            "Restaurar una copia de seguridad sobrescribirá los datos actuales de la base de datos.\n¿Deseas continuar?",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+
+        if confirmacion == QMessageBox.Yes:
+            # Abrir diálogo para buscar el archivo JSON de respaldo
+            ruta_inicial = Path(__file__).resolve().parent.parent / "backups" / "storage"
+            archivo, _ = QFileDialog.getOpenFileName(
+                self, 
+                "Seleccionar Archivo de Respaldo", 
+                str(ruta_inicial), 
+                "Archivos JSON (*.json)"
+            )
+
+            if archivo:
+                exito = BackupManager.restaurar_base_datos(archivo)
+                if exito:
+                    QMessageBox.information(
+                        self, 
+                        "Restauración Exitosa", 
+                        "La base de datos se ha restaurado correctamente.\nLa aplicación se reiniciará ahora."
+                    )
+                    logger.info("Restauración completada con éxito. Reiniciando la aplicación...")
+                    
+                    # -------------------------------------------------------------
+                    # REINICIO LITERAL DE LA APLICACIÓN
+                    # -------------------------------------------------------------
+                    import sys
+                    import os
+                    
+                    # Cierra la instancia actual y relanza el proceso de Python con los mismos argumentos
+                    os.execl(sys.executable, sys.executable, *sys.argv)
+                    # -------------------------------------------------------------
+                else:
+                    QMessageBox.critical(
+                        self, 
+                        "Error de Restauración", 
+                        "No se pudo completar la restauración de la base de datos. Revisa los logs para más detalles."
+                    )

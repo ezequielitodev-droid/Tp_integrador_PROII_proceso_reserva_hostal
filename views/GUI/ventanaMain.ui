@@ -219,6 +219,51 @@ Reservas</string>
          </property>
         </spacer>
        </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_restaurar">
+         <property name="leftMargin">
+          <number>15</number>
+         </property>
+         <property name="rightMargin">
+          <number>15</number>
+         </property>
+         <property name="bottomMargin">
+          <number>20</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="BotonRestaurar">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>38</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">
+             QPushButton {
+                 background-color: #FDB93B;
+                 color: #232323;
+                 border: none;
+                 border-radius: 7px;
+                 font-weight: bold;
+                 font-size: 13px;
+                 font-family: Segoe UI;
+             }
+             QPushButton:hover {
+                 background-color: #e5a532;
+             }
+             QPushButton:pressed {
+                 background-color: #cc922b;
+             }
+            </string>
+           </property>
+           <property name="text">
+            <string>Restaurar</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
       </layout>
      </widget>
     </item>

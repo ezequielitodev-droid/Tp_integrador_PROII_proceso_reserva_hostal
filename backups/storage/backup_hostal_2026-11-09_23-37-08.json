@@ -1,0 +1,805 @@
+{
+    "version_sistema": "1.0",
+    "fecha_copia": "2026-11-09T23:37:07.858217",
+    "tablas": {
+        "clientes": [
+            {
+                "id_cliente": 1,
+                "nombre": "Martin",
+                "apellido": "Gomez",
+                "dni": "30123456",
+                "telefono": "387-4112233",
+                "correo": "martin.gomez@example.com",
+                "activo": 1
+            },
+            {
+                "id_cliente": 2,
+                "nombre": "Sofía",
+                "apellido": "Álvarez",
+                "dni": "28456789",
+                "telefono": "387-4556677",
+                "correo": "sofia.alvarez@example.com",
+                "activo": 1
+            },
+            {
+                "id_cliente": 3,
+                "nombre": "Carolina",
+                "apellido": "Méndez",
+                "dni": "32789012",
+                "telefono": "387-4223344",
+                "correo": "carolina.mendez@example.com",
+                "activo": 1
+            },
+            {
+                "id_cliente": 4,
+                "nombre": "Diego",
+                "apellido": "Herrera",
+                "dni": "35123987",
+                "telefono": "387-4334455",
+                "correo": "diego.herrera@example.com",
+                "activo": 1
+            },
+            {
+                "id_cliente": 5,
+                "nombre": "Florencia",
+                "apellido": "Rojas",
+                "dni": "33456123",
+                "telefono": "387-4445566",
+                "correo": "florencia.rojas@example.com",
+                "activo": 1
+            },
+            {
+                "id_cliente": 6,
+                "nombre": "Nicolás",
+                "apellido": "Vega",
+                "dni": "31987654",
+                "telefono": "387-4667788",
+                "correo": "nicolas.vega@example.com",
+                "activo": 1
+            },
+            {
+                "id_cliente": 7,
+                "nombre": "Agustina",
+                "apellido": "Paz",
+                "dni": "36234567",
+                "telefono": "387-4778899",
+                "correo": "agustina.paz@example.com",
+                "activo": 1
+            },
+            {
+                "id_cliente": 8,
+                "nombre": "Ramiro",
+                "apellido": "Castro",
+                "dni": "34567890",
+                "telefono": "387-4889900",
+                "correo": "ramiro.castro@example.com",
+                "activo": 1
+            },
+            {
+                "id_cliente": 9,
+                "nombre": "Valeria",
+                "apellido": "Suárez",
+                "dni": "37890123",
+                "telefono": "387-4990011",
+                "correo": "valeria.suarez@example.com",
+                "activo": 1
+            },
+            {
+                "id_cliente": 10,
+                "nombre": "Matías",
+                "apellido": "Navarro",
+                "dni": "38901234",
+                "telefono": "387-4111222",
+                "correo": "matias.navarro@example.com",
+                "activo": 1
+            },
+            {
+                "id_cliente": 11,
+                "nombre": "Luciana",
+                "apellido": "Benítez",
+                "dni": "39012345",
+                "telefono": "387-4222333",
+                "correo": "luciana.benitez@example.com",
+                "activo": 1
+            },
+            {
+                "id_cliente": 12,
+                "nombre": "Facundo",
+                "apellido": "Giménez",
+                "dni": "40123456",
+                "telefono": "387-4333444",
+                "correo": "facundo.gimenez@example.com",
+                "activo": 1
+            },
+            {
+                "id_cliente": 13,
+                "nombre": "Camila",
+                "apellido": "Medina",
+                "dni": "41234567",
+                "telefono": "387-4444555",
+                "correo": "camila.medina@example.com",
+                "activo": 1
+            },
+            {
+                "id_cliente": 14,
+                "nombre": "Gonzalo",
+                "apellido": "Peralta",
+                "dni": "42345678",
+                "telefono": "387-4555666",
+                "correo": "gonzalo.peralta@example.com",
+                "activo": 1
+            },
+            {
+                "id_cliente": 15,
+                "nombre": "Agustín",
+                "apellido": "Acosta",
+                "dni": "43456789",
+                "telefono": "387-4666777",
+                "correo": "agustin.acosta@example.com",
+                "activo": 1
+            },
+            {
+                "id_cliente": 16,
+                "nombre": "Julieta",
+                "apellido": "Molina",
+                "dni": "44567890",
+                "telefono": "387-4777888",
+                "correo": "julieta.molina@example.com",
+                "activo": 1
+            },
+            {
+                "id_cliente": 17,
+                "nombre": "Lucas",
+                "apellido": "Silva",
+                "dni": "45678901",
+                "telefono": "387-4888999",
+                "correo": "lucas.silva@example.com",
+                "activo": 1
+            },
+            {
+                "id_cliente": 18,
+                "nombre": "Mariana",
+                "apellido": "Ortiz",
+                "dni": "46789012",
+                "telefono": "387-4999000",
+                "correo": "mariana.ortiz@example.com",
+                "activo": 1
+            },
+            {
+                "id_cliente": 19,
+                "nombre": "Esteban",
+                "apellido": "Romero",
+                "dni": "47890123",
+                "telefono": "387-4000111",
+                "correo": "esteban.romero@example.com",
+                "activo": 1
+            },
+            {
+                "id_cliente": 20,
+                "nombre": "Natalia",
+                "apellido": "Díaz",
+                "dni": "48901234",
+                "telefono": "387-4001222",
+                "correo": "natalia.diaz@example.com",
+                "activo": 1
+            }
+        ],
+        "habitaciones": [
+            {
+                "id_habitacion": 1,
+                "numero": 1,
+                "capacidad": 4,
+                "precio_noche": 18000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 2,
+                "numero": 2,
+                "capacidad": 4,
+                "precio_noche": 18000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 3,
+                "numero": 3,
+                "capacidad": 2,
+                "precio_noche": 15000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 4,
+                "numero": 4,
+                "capacidad": 1,
+                "precio_noche": 12000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 5,
+                "numero": 5,
+                "capacidad": 3,
+                "precio_noche": 20000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 6,
+                "numero": 6,
+                "capacidad": 2,
+                "precio_noche": 15000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 7,
+                "numero": 7,
+                "capacidad": 4,
+                "precio_noche": 18000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 8,
+                "numero": 8,
+                "capacidad": 1,
+                "precio_noche": 12000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 9,
+                "numero": 9,
+                "capacidad": 3,
+                "precio_noche": 20000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 10,
+                "numero": 10,
+                "capacidad": 2,
+                "precio_noche": 15000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 11,
+                "numero": 11,
+                "capacidad": 4,
+                "precio_noche": 18000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 12,
+                "numero": 12,
+                "capacidad": 1,
+                "precio_noche": 12000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 13,
+                "numero": 13,
+                "capacidad": 2,
+                "precio_noche": 15000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 14,
+                "numero": 14,
+                "capacidad": 3,
+                "precio_noche": 20000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 15,
+                "numero": 15,
+                "capacidad": 4,
+                "precio_noche": 18000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 16,
+                "numero": 16,
+                "capacidad": 2,
+                "precio_noche": 15000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 17,
+                "numero": 17,
+                "capacidad": 1,
+                "precio_noche": 12000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 18,
+                "numero": 18,
+                "capacidad": 3,
+                "precio_noche": 20000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 19,
+                "numero": 19,
+                "capacidad": 4,
+                "precio_noche": 18000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 20,
+                "numero": 20,
+                "capacidad": 2,
+                "precio_noche": 15000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 21,
+                "numero": 21,
+                "capacidad": 2,
+                "precio_noche": 25000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 22,
+                "numero": 22,
+                "capacidad": 2,
+                "precio_noche": 25000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 23,
+                "numero": 23,
+                "capacidad": 3,
+                "precio_noche": 22000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 24,
+                "numero": 24,
+                "capacidad": 2,
+                "precio_noche": 28000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 25,
+                "numero": 25,
+                "capacidad": 4,
+                "precio_noche": 30000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 26,
+                "numero": 26,
+                "capacidad": 1,
+                "precio_noche": 19000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 27,
+                "numero": 27,
+                "capacidad": 3,
+                "precio_noche": 22000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 28,
+                "numero": 28,
+                "capacidad": 2,
+                "precio_noche": 25000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 29,
+                "numero": 29,
+                "capacidad": 4,
+                "precio_noche": 30000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 30,
+                "numero": 30,
+                "capacidad": 2,
+                "precio_noche": 25000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 31,
+                "numero": 31,
+                "capacidad": 3,
+                "precio_noche": 22000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 32,
+                "numero": 32,
+                "capacidad": 1,
+                "precio_noche": 19000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 33,
+                "numero": 33,
+                "capacidad": 4,
+                "precio_noche": 30000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 34,
+                "numero": 34,
+                "capacidad": 2,
+                "precio_noche": 25000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 35,
+                "numero": 35,
+                "capacidad": 3,
+                "precio_noche": 22000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 36,
+                "numero": 36,
+                "capacidad": 1,
+                "precio_noche": 19000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 37,
+                "numero": 37,
+                "capacidad": 2,
+                "precio_noche": 25000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 38,
+                "numero": 38,
+                "capacidad": 3,
+                "precio_noche": 22000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 39,
+                "numero": 39,
+                "capacidad": 4,
+                "precio_noche": 30000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 40,
+                "numero": 40,
+                "capacidad": 2,
+                "precio_noche": 25000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 41,
+                "numero": 41,
+                "capacidad": 4,
+                "precio_noche": 20000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 42,
+                "numero": 42,
+                "capacidad": 3,
+                "precio_noche": 16000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 43,
+                "numero": 43,
+                "capacidad": 2,
+                "precio_noche": 14000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 44,
+                "numero": 44,
+                "capacidad": 1,
+                "precio_noche": 10000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 45,
+                "numero": 45,
+                "capacidad": 4,
+                "precio_noche": 20000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 46,
+                "numero": 46,
+                "capacidad": 3,
+                "precio_noche": 16000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 47,
+                "numero": 47,
+                "capacidad": 2,
+                "precio_noche": 14000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 48,
+                "numero": 48,
+                "capacidad": 1,
+                "precio_noche": 10000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 49,
+                "numero": 49,
+                "capacidad": 4,
+                "precio_noche": 20000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 50,
+                "numero": 50,
+                "capacidad": 3,
+                "precio_noche": 16000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 51,
+                "numero": 51,
+                "capacidad": 2,
+                "precio_noche": 14000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 52,
+                "numero": 52,
+                "capacidad": 1,
+                "precio_noche": 10000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 53,
+                "numero": 53,
+                "capacidad": 4,
+                "precio_noche": 20000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 54,
+                "numero": 54,
+                "capacidad": 3,
+                "precio_noche": 16000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 55,
+                "numero": 55,
+                "capacidad": 2,
+                "precio_noche": 14000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 56,
+                "numero": 56,
+                "capacidad": 1,
+                "precio_noche": 10000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 57,
+                "numero": 57,
+                "capacidad": 4,
+                "precio_noche": 20000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 58,
+                "numero": 58,
+                "capacidad": 3,
+                "precio_noche": 16000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 59,
+                "numero": 59,
+                "capacidad": 2,
+                "precio_noche": 14000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            },
+            {
+                "id_habitacion": 60,
+                "numero": 60,
+                "capacidad": 1,
+                "precio_noche": 10000.0,
+                "estado": "DISPONIBLE",
+                "activo": 1
+            }
+        ],
+        "huespedes": [
+            {
+                "id_huesped": 1,
+                "nombre": "Bruno",
+                "apellido": "Costilla",
+                "dni": "44802136",
+                "telefono": "3875166117",
+                "activo": 1
+            },
+            {
+                "id_huesped": 2,
+                "nombre": "Agustin",
+                "apellido": "Costilla",
+                "dni": "44802137",
+                "telefono": "3875166117",
+                "activo": 1
+            },
+            {
+                "id_huesped": 3,
+                "nombre": "Agustin",
+                "apellido": "Costilla",
+                "dni": "44802139",
+                "telefono": "3875166119",
+                "activo": 1
+            },
+            {
+                "id_huesped": 4,
+                "nombre": "Elizabeth",
+                "apellido": "Costilla",
+                "dni": "42258862",
+                "telefono": "3871222333",
+                "activo": 1
+            }
+        ],
+        "reservas": [
+            {
+                "id_reserva": 1,
+                "fecha_reserva": "2026-11-09",
+                "fecha_ingreso": "2026-11-09",
+                "fecha_salida": "2026-11-10",
+                "estado": "RESERVADA",
+                "monto_total": 0.0,
+                "id_cliente": 1,
+                "activo": 0
+            },
+            {
+                "id_reserva": 2,
+                "fecha_reserva": "2026-11-09",
+                "fecha_ingreso": "2026-11-09",
+                "fecha_salida": "2026-11-10",
+                "estado": "RESERVADA",
+                "monto_total": 0.0,
+                "id_cliente": 1,
+                "activo": 0
+            },
+            {
+                "id_reserva": 3,
+                "fecha_reserva": "2026-11-09",
+                "fecha_ingreso": "2026-11-09",
+                "fecha_salida": "2026-11-26",
+                "estado": "RESERVADA",
+                "monto_total": 629000.0,
+                "id_cliente": 1,
+                "activo": 1
+            },
+            {
+                "id_reserva": 4,
+                "fecha_reserva": "2026-11-09",
+                "fecha_ingreso": "2026-11-09",
+                "fecha_salida": "2026-11-18",
+                "estado": "RESERVADA",
+                "monto_total": 270000.0,
+                "id_cliente": 1,
+                "activo": 1
+            }
+        ],
+        "reservas_x_huespedes": [
+            {
+                "id_res_x_hue": 1,
+                "id_reserva": 1,
+                "id_huesped": 1
+            },
+            {
+                "id_res_x_hue": 2,
+                "id_reserva": 2,
+                "id_huesped": 2
+            },
+            {
+                "id_res_x_hue": 3,
+                "id_reserva": 3,
+                "id_huesped": 1
+            },
+            {
+                "id_res_x_hue": 4,
+                "id_reserva": 3,
+                "id_huesped": 3
+            },
+            {
+                "id_res_x_hue": 6,
+                "id_reserva": 4,
+                "id_huesped": 1
+            },
+            {
+                "id_res_x_hue": 5,
+                "id_reserva": 4,
+                "id_huesped": 4
+            }
+        ],
+        "reservas_x_habitaciones": [
+            {
+                "id_res_x_hab": 1,
+                "id_reserva": 1,
+                "id_habitacion": 17
+            },
+            {
+                "id_res_x_hab": 2,
+                "id_reserva": 2,
+                "id_habitacion": 17
+            },
+            {
+                "id_res_x_hab": 4,
+                "id_reserva": 3,
+                "id_habitacion": 17
+            },
+            {
+                "id_res_x_hab": 3,
+                "id_reserva": 3,
+                "id_habitacion": 21
+            },
+            {
+                "id_res_x_hab": 5,
+                "id_reserva": 4,
+                "id_habitacion": 10
+            }
+        ]
+    }
+}

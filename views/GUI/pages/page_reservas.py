@@ -14,6 +14,7 @@ from services.huesped_service import HuespedService
 from services.habitacion_service import HabitacionService
 from services.reserva_service import ReservaService
 from utils.datatypes.EstadoReserva import EstadoReserva
+from backups.backup_manager import BackupManager  # <--- Importamos el gestor de backups
 
 #Constants:
 
@@ -61,6 +62,11 @@ class PageReservas(QWidget):
         self.BotonModificar.clicked.connect(self.modificar_reserva_seleccionada)
         self.BotonDetalles.clicked.connect(self.ver_detalles_reserva)
         self.BotonEliminar.clicked.connect(self.eliminar_reserva_seleccionada)
+        
+        # Conexión para el botón de hacer copia de seguridad en la vista de reservas
+        if hasattr(self, "BotonCopiaSeguridad"):
+            self.BotonCopiaSeguridad.clicked.connect(self.generar_copia_seguridad_gui)
+            
         logger.info("Conexiones de botones en PageReservas inicializadas.")
 
     #Metodos de funcion:
@@ -322,3 +328,24 @@ class PageReservas(QWidget):
         except Exception as e:
             print(f"Error al intentar dar de baja la reserva: {e}")
             logger.error(f"Error crítico al intentar dar de baja la reserva ID {reserva_id} desde la GUI: {e}")
+
+    def generar_copia_seguridad_gui(self):
+        """Genera una copia de seguridad en JSON de toda la base de datos al hacer clic en el botón."""
+        try:
+            ruta_backup = BackupManager.generar_copia_seguridad()
+            if ruta_backup:
+                QMessageBox.information(
+                    self,
+                    "Copia de Seguridad Exitosa",
+                    f"El respaldo de la base de datos se ha generado correctamente en:\n\n{ruta_backup}"
+                )
+                logger.info(f"Copia de seguridad generada desde la interfaz en: {ruta_backup}")
+            else:
+                QMessageBox.critical(
+                    self,
+                    "Error de Respaldo",
+                    "No se pudo generar la copia de seguridad. Revisa los logs para más detalles."
+                )
+        except Exception as e:
+            logger.error(f"Error crítico al generar copia de seguridad desde la GUI: {e}")
+            QMessageBox.warning(self, "Error", f"Ocurrió un error inesperado:\n{e}")
