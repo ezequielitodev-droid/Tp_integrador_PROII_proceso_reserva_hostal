@@ -142,10 +142,12 @@ def es_dni_valido(dni: str) -> bool:
     return dni.isdigit() and len(dni) in (7, 8)
 
 def es_telefono_valido(telefono: str) -> bool:
-
-    if not isinstance(telefono, str): return False
+    if not isinstance(telefono, str): 
+        return False
         
-    return telefono.isascii() and telefono.isdigit() and len(telefono) == 10
+    telefono_limpio = telefono.strip().replace("-", "").replace(" ", "")
+    
+    return telefono_limpio.isascii() and telefono_limpio.isdigit() and len(telefono_limpio) == 10
 
 def es_correo_valido(correo: str) -> bool:
 
