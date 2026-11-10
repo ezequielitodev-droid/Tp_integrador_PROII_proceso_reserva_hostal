@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DialogModificarReserva</class>
+ <widget class="QDialog" name="DialogModificarReserva">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>500</width>
+    <height>440</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Modificar Reserva</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+    QDialog {
+        background-color: #323232;
+        color: #FFFFFF;
+        font-family: Segoe UI;
+    }
+    QLabel {
+        color: #E2E8F0;
+        font-weight: bold;
+        font-size: 12px;
+    }
+    QDateEdit {
+        background-color: #FFFFFF;
+        color: #263445;
+        border: 1px solid #232323;
+        border-radius: 5px;
+        padding: 6px;
+        font-size: 12px;
+    }
+    QPushButton {
+        background-color: #FDB93B;
+        color: #232323;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 14px;
+        font-weight: bold;
+    }
+    QPushButton:hover {
+        background-color: #e5a532;
+    }
+    QPushButton:pressed {
+        background-color: #cc922b;
+    }
+
+    /* ESTILOS PARA EL CALENDARIO DESPLEGABLE (POPUP) */
+    QCalendarWidget QWidget {
+        background-color: #2D2D2D;
+        color: #FFFFFF;
+    }
+    QCalendarWidget QToolButton {
+        color: #232323;
+        background-color: #FDB93B;
+        border-radius: 4px;
+        margin: 2px;
+        padding: 4px;
+        font-weight: bold;
+    }
+    QCalendarWidget QToolButton:hover {
+        background-color: #e5a532;
+    }
+    QCalendarWidget QMenu {
+        background-color: #323232;
+        color: #FFFFFF;
+    }
+    QCalendarWidget QSpinBox {
+        background-color: #FFFFFF;
+        color: #263445;
+        selection-background-color: #FDB93B;
+    }
+    QCalendarWidget QWidget#qt_calendar_navigationbar {
+        background-color: #3B3B3B;
+    }
+    QCalendarWidget QAbstractItemView {
+        background-color: #242524;
+        color: #FFFFFF;
+        selection-background-color: #FDB93B;
+        selection-color: #232323;
+    }
+   </string>
+  </property>
+  <layout class="QVBoxLayout" name="layout_principal">
+   <property name="spacing">
+    <number>15</number>
+   </property>
+   <property name="leftMargin">
+    <number>20</number>
+   </property>
+   <property name="topMargin">
+    <number>20</number>
+   </property>
+   <property name="rightMargin">
+    <number>20</number>
+   </property>
+   <property name="bottomMargin">
+    <number>20</number>
+   </property>
+
+   <!-- TÍTULO -->
+   <item>
+    <widget class="QLabel" name="label_titulo">
+     <property name="text">
+      <string>Modificar Reserva</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font-size: 18px; color: #FDB93B;</string>
+     </property>
+    </widget>
+   </item>
+
+   <!-- SECCIÓN INFO BREVE -->
+   <item>
+    <widget class="QLabel" name="label_info_reserva">
+     <property name="text">
+      <string>Actualiza las fechas de estadía o marca la reserva como cancelada.</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font-size: 11px; color: #A0AEC0; font-weight: normal;</string>
+     </property>
+    </widget>
+   </item>
+
+   <!-- SECCIÓN FECHAS -->
+   <item>
+    <widget class="QFrame" name="frame_fechas">
+     <property name="styleSheet">
+      <string notr="true">
+       QFrame {
+           background-color: #3B3B3B;
+           border: 1px solid #232323;
+           border-radius: 8px;
+       }
+      </string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_fechas">
+      <item>
+       <layout class="QHBoxLayout" name="layout_fechas">
+        <item>
+         <widget class="QLabel" name="lbl_fecha_ingreso"><property name="text"><string>Ingreso:</string></property></widget>
+        </item>
+        <item>
+         <widget class="QDateEdit" name="input_fecha_ingreso">
+          <property name="calendarPopup"><bool>true</bool></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lbl_fecha_salida"><property name="text"><string>Salida:</string></property></widget>
+        </item>
+        <item>
+         <widget class="QDateEdit" name="input_fecha_salida">
+          <property name="calendarPopup"><bool>true</bool></property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+
+   <!-- SECCIÓN ESTADO / CANCELACIÓN -->
+   <item>
+    <widget class="QFrame" name="frame_estado">
+     <property name="styleSheet">
+      <string notr="true">
+       QFrame {
+           background-color: #3B3B3B;
+           border: 1px solid #232323;
+           border-radius: 8px;
+           padding: 5px;
+       }
+      </string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_estado">
+      <item>
+       <widget class="QCheckBox" name="check_cancelar">
+        <property name="text">
+         <string>Marcar reserva como Cancelada</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+          QCheckBox {
+              color: #FFFFFF;
+              font-weight: bold;
+              font-size: 12px;
+              background: transparent;
+          }
+          QCheckBox::indicator {
+              width: 16px;
+              height: 16px;
+              border-radius: 3px;
+              border: 1px solid #555555;
+              background-color: #FFFFFF;
+          }
+          QCheckBox::indicator:checked {
+              background-color: #D65B5B;
+              border: 1px solid #D65B5B;
+          }
+         </string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+
+   <!-- INDICADOR DE MONTO TOTAL NUEVO -->
+   <item>
+    <layout class="QHBoxLayout" name="layout_monto_total">
+     <item>
+      <spacer name="spacer_monto">
+       <property name="orientation"><enum>Qt::Horizontal</enum></property>
+       <property name="sizeHint" stdset="0"><size><width>40</width><height>20</height></size></property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="lbl_titulo_total">
+       <property name="text">
+        <string>Nuevo Monto Estimado:</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font-size: 14px; color: #FFFFFF;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_monto_total_valor">
+       <property name="text">
+        <string>$ 0.00</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font-size: 16px; color: #FDB93B; font-weight: bold;</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+
+   <!-- ESPACIADOR -->
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation"><enum>Qt::Vertical</enum></property>
+     <property name="sizeHint" stdset="0"><size><width>20</width><height>10</height></size></property>
+    </spacer>
+   </item>
+
+   <!-- BOTONES DE ACCIÓN -->
+   <item>
+    <layout class="QHBoxLayout" name="layout_botones">
+     <item>
+      <spacer name="spacer_botones">
+       <property name="orientation"><enum>Qt::Horizontal</enum></property>
+       <property name="sizeHint" stdset="0"><size><width>40</width><height>20</height></size></property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_cancelar">
+       <property name="styleSheet">
+        <string notr="true">
+         QPushButton { background-color: #4A4A4A; color: #FFFFFF; border: 1px solid #555555; }
+         QPushButton:hover { background-color: #555555; }
+        </string>
+       </property>
+       <property name="text">
+        <string>Cancelar</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_guardar">
+       <property name="styleSheet">
+        <string notr="true">
+         QPushButton { background-color: #FDB93B; color: #232323; }
+         QPushButton:hover { background-color: #e5a532; }
+        </string>
+       </property>
+       <property name="text">
+        <string>Guardar Cambios</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+</ui>

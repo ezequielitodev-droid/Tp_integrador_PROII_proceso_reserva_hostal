@@ -2,16 +2,17 @@
 
 import logging
 from pathlib import Path
-from PyQt5.QtWidgets import QWidget
 from PyQt5.QtWidgets import QWidget, QListWidgetItem, QDialog, QMessageBox
 from PyQt5 import uic
 
 from views.GUI.dialogs.dialog_crear_reserva import DialogCrearReserva
+from views.GUI.dialogs.dialog_modificar_reserva import DialogModificarReserva
 
 from services.cliente_service import ClienteService
 from services.huesped_service import HuespedService
 from services.habitacion_service import HabitacionService
 from services.reserva_service import ReservaService
+from utils.datatypes.EstadoReserva import EstadoReserva  # Ajusta la ruta si es necesario
 
 #Constants:
 
@@ -56,7 +57,7 @@ class PageReservas(QWidget):
     #Metodo conector:
     def init_ui_connections(self):
         self.BotonAgregar.clicked.connect(self.agregar_una_reserva)
-        #self.btnModificar.clicked.connect(self.modificar_reserva_seleccionada)
+        self.BotonModificar.clicked.connect(self.modificar_reserva_seleccionada)
         self.BotonEliminar.clicked.connect(self.eliminar_reserva_seleccionada)
         logger.info("Conexiones de botones en PageReservas inicializadas.")
 
@@ -87,6 +88,7 @@ class PageReservas(QWidget):
                 logger.info(f"Reserva #{id_reserva_creada} registrada y guardada exitosamente desde la GUI.")
                 
                 # Recargamos la lista visual de reservas para reflejar la nueva
+                self.listWidget.clear()
                 self.cargar_reservas()
                 
                 QMessageBox.information(
@@ -130,13 +132,16 @@ class PageReservas(QWidget):
             #Si tienen baja logica no tengo que hacer nada, porque estan eliminados:
             if reserva_obj.get_activo() == 1:
 
-                # Como reserva_obj es un objeto de la clase Reserva, usamos notación de punto (.) 
-                # para armar un texto descriptivo prolijo para la interfaz:
+                # Como reserva_obj es un objeto de la clase Reserva, extraemos su estado de forma limpia
+                estado_obj = reserva_obj.get_estado() if hasattr(reserva_obj, "get_estado") else EstadoReserva.RESERVADA
+                estado_str = estado_obj.value if isinstance(estado_obj, EstadoReserva) else str(estado_obj)
+                
                 texto_visible = (
                     f"Reserva #{reserva_obj.get_id_reserva()} | "
                     f"Ingreso: {reserva_obj.get_fecha_ingreso()} | "
                     f"Salida: {reserva_obj.get_fecha_salida()} | "
-                    f"Total: ${reserva_obj.get_monto_total()}"
+                    f"Total: ${reserva_obj.get_monto_total()} | "
+                    f"Estado: {estado_str.capitalize()}"
                 )
 
                 # Creamos el ítem del listado visual con ese texto
@@ -151,10 +156,102 @@ class PageReservas(QWidget):
 
         logger.info(f"Listado visual actualizado con éxito. Total de reservas activas listadas: {contador_cargadas}")
 
-    def modificar_reserva(self, reserva_id):
-        print(f"Modificar reserva con ID: {reserva_id}")
-        logger.info(f"Acción de modificación solicitada para la reserva ID: {reserva_id}")
-        #Aquí abrirías tu ventana o lógica de modificación
+    def modificar_reserva_seleccionada(self):
+        """Abre el diálogo para modificar las fechas, el estado y el monto de la reserva seleccionada."""
+        item_seleccionado = self.listWidget.currentItem()
+
+        if not item_seleccionado:
+            print("Por favor, selecciona una reserva de la lista para modificar.")
+            logger.warning("Intento de modificar reserva sin haber seleccionado ningún ítem en la lista.")
+            QMessageBox.warning(self, "Selección requerida", "Por favor, selecciona una reserva de la lista para modificar.")
+            return
+
+        reserva_id = item_seleccionado.data(32)
+
+        try:
+            # Buscamos el objeto reserva actual en la lista de reservas del servicio
+            reservas = self.servicio_reserva.obtener_reservas()
+            reserva_encontrada = None
+            for item_tupla in reservas:
+                if item_tupla and item_tupla[0]:
+                    r_obj, _ = item_tupla
+                    if r_obj.get_id_reserva() == reserva_id:
+                        reserva_encontrada = r_obj
+                        break
+
+            if not reserva_encontrada:
+                QMessageBox.warning(self, "Error", "No se encontró la información de la reserva seleccionada.")
+                return
+
+            f_ingreso = reserva_encontrada.get_fecha_ingreso()
+            f_salida = reserva_encontrada.get_fecha_salida()
+            monto_actual = float(reserva_encontrada.get_monto_total())
+            estado_actual = reserva_encontrada.get_estado() if hasattr(reserva_encontrada, "get_estado") else EstadoReserva.RESERVADA
+
+            # Calculamos el precio por noche actual para mantenerlo proporcional al cambiar fechas
+            from PyQt5.QtCore import QDate
+            from datetime import date
+            if isinstance(f_ingreso, date) and isinstance(f_salida, date):
+                qd_in = QDate(f_ingreso.year, f_ingreso.month, f_ingreso.day)
+                qd_out = QDate(f_salida.year, f_salida.month, f_salida.day)
+                noches = qd_in.daysTo(qd_out)
+                precio_noche_unitario = (monto_actual / noches) if noches > 0 else 0.0
+            else:
+                precio_noche_unitario = 0.0
+
+            # Instanciamos el diálogo de modificación pasando el estado actual
+            dialog = DialogModificarReserva(
+                fecha_ingreso_actual=f_ingreso,
+                fecha_salida_actual=f_salida,
+                precio_total_por_noche=precio_noche_unitario,
+                estado_actual=estado_actual,
+                parent=self
+            )
+
+            if dialog.exec_() == QDialog.Accepted:
+                nuevos_datos = dialog.obtener_nuevos_datos()
+                
+                # Invocamos tu método de servicio enviando el objeto EstadoReserva correspondiente
+                self.servicio_reserva.modificar_reserva(
+                    id_reserva=reserva_id,
+                    fecha_ingreso=nuevos_datos["fecha_ingreso"],
+                    fecha_salida=nuevos_datos["fecha_salida"],
+                    monto_total=nuevos_datos["monto_total"],
+                    estado=nuevos_datos["estado"]
+                )
+
+                logger.info(f"Reserva ID {reserva_id} modificada exitosamente desde la GUI.")
+                
+                # Actualización directa inmediata del ítem visual en la lista
+                nuevo_ingreso = nuevos_datos["fecha_ingreso"]
+                nuevo_salida = nuevos_datos["fecha_salida"]
+                nuevo_monto = nuevos_datos["monto_total"]
+                nuevo_estado_enum = nuevos_datos["estado"]
+                nuevo_estado_str = nuevo_estado_enum.value.capitalize() if isinstance(nuevo_estado_enum, EstadoReserva) else str(nuevo_estado_enum).capitalize()
+
+                texto_actualizado = (
+                    f"Reserva #{reserva_id} | "
+                    f"Ingreso: {nuevo_ingreso} | "
+                    f"Salida: {nuevo_salida} | "
+                    f"Total: ${nuevo_monto} | "
+                    f"Estado: {nuevo_estado_str}"
+                )
+                item_seleccionado.setText(texto_actualizado)
+                
+                QMessageBox.information(
+                    self, 
+                    "Éxito", 
+                    f"La reserva #{reserva_id} se ha modificado correctamente."
+                )
+
+        except Exception as e:
+            print(f"Error al intentar modificar la reserva: {e}")
+            logger.error(f"Error crítico al intentar modificar la reserva ID {reserva_id} desde la GUI: {e}")
+            QMessageBox.warning(
+                self, 
+                "Error", 
+                f"No se pudo modificar la reserva:\n{e}"
+            )
 
     def eliminar_reserva_seleccionada(self):
         #Obtenemos el ítem seleccionado en la lista
