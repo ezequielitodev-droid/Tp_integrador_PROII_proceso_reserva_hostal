@@ -21,7 +21,8 @@ from utils.validators.datavalidators import (
 
 # Global Variables:
 
-logger = logging.getLogger(__name__)
+# Apuntamos al parlante específico de la capa de Servicios
+logger = logging.getLogger("services.reserva_service")
 
 # Class:
 
@@ -47,13 +48,13 @@ class ReservaService:
             fecha_salida: date, 
             monto_total: Decimal | float, 
             id_cliente: int,
-            estado: EstadoReserva | str = EstadoReserva.RESERVADA  # <--- Corregido aquí
+            estado: EstadoReserva | str = EstadoReserva.RESERVADA,
+            conexion_externa = None
     ) -> int | None:
         """
             Aplica reglas de negocio y validaciones antes de persistir una reserva.
             Verifica la existencia del cliente y la coherencia en las fechas y montos.
         """
-        # 1. Validaciones estructurales con los validadores del sistema
         if not es_fecha_reserva_valida(fecha_reserva):
             raise ValueError("La fecha de reserva no es válida.")
 
@@ -66,7 +67,6 @@ class ReservaService:
         if not es_rango_fechas_valido(fecha_ingreso, fecha_salida):
             raise ValueError("La fecha de salida debe ser posterior a la fecha de ingreso.")
 
-        # Convertimos y validamos monto total
         monto_dec = Decimal(str(monto_total)) if not isinstance(monto_total, Decimal) else monto_total
         if not es_monto_total_valido(monto_dec):
             raise ValueError("El monto total de la reserva no es válido.")
@@ -74,13 +74,12 @@ class ReservaService:
         if not es_id_persona_valido(id_cliente):
             raise ValueError("El ID del cliente asociado no es válido.")
 
-        # 2. Regla de negocio: Validar que el cliente exista y esté activo
-        cliente = self.cliente_dao.obtener_cliente_por_id(id_cliente)
+        # Pasamos la conexión externa al DAO del cliente
+        cliente = self.cliente_dao.obtener_cliente_por_id(id_cliente, conexion_externa=conexion_externa)
         if not cliente or not cliente.get_activo():
             logger.warning(f"Intento de crear reserva para un cliente inexistente o inactivo ID: {id_cliente}")
             raise ValueError(f"El cliente con ID {id_cliente} no existe o no se encuentra activo.")
 
-        # Normalizamos estado si viene como string
         if isinstance(estado, str):
             estado = EstadoReserva(estado.lower())
 
@@ -97,16 +96,142 @@ class ReservaService:
             activo=True
         )
 
-        id_generado = self.reserva_dao.crear_reserva(nueva_reserva, id_cliente)
+        # Pasamos la conexión externa al DAO de reservas
+        id_generado = self.reserva_dao.crear_reserva(nueva_reserva, id_cliente, conexion_externa=conexion_externa)
+        
+        if id_generado:
+            logger.info(f"Reserva principal creada con éxito con ID: {id_generado}")
+
         return id_generado
+
+    def crear_reserva_completa(self, datos_formulario: dict, conexion_externa = None) -> int:
+        
+        cliente_info = datos_formulario.get("cliente", {})
+        fechas = datos_formulario.get("fechas", {})
+        huespedes_lista = datos_formulario.get("huespedes", [])
+
+        if not huespedes_lista:
+            raise ValueError("La reserva debe contener al menos un huésped asignado a una habitación.")
+
+        dni_cliente_titular = cliente_info.get("dni")
+        if not dni_cliente_titular:
+            raise ValueError("El DNI del cliente titular es obligatorio.")
+
+        print("🔍 A punto de llamar a obtener_cliente_por_dni con el DNI:", dni_cliente_titular)
+        cliente_existente = self.cliente_dao.obtener_cliente_por_dni(dni_cliente_titular, conexion_externa=conexion_externa)
+        print("🔍 Resultado obtenido:", cliente_existente)
+        if not cliente_existente:
+            print("El cliente esta en NONE")
+        else:
+            print("El cliente si tiene datos...")
+            print(cliente_existente)
+            print(cliente_existente.get_id_persona())
+            print(cliente_existente.get_activo())
+            print(cliente_existente.get_nombre())
+            print(cliente_existente.get_telefono())
+            print(cliente_existente.get_apellido())
+            print(cliente_existente.get_correo())
+        if not cliente_existente or not cliente_existente.get_activo():
+            logger.warning(f"Intento de reserva completa con DNI titular inexistente o inactivo: {dni_cliente_titular}")
+            raise ValueError(
+                f"El cliente titular con DNI {dni_cliente_titular} no existe o no se encuentra activo."
+            )
+        
+        id_cliente = cliente_existente.get_id_persona()
+
+        # Crear la reserva principal pasando la conexión externa
+        id_reserva = self.crear_reserva(
+            fecha_reserva=date.today(),
+            fecha_ingreso=fechas.get("fecha_ingreso"),
+            fecha_salida=fechas.get("fecha_salida"),
+            monto_total=fechas.get("monto_total", 0.0),
+            id_cliente=id_cliente, #type: ignore
+            estado=EstadoReserva.RESERVADA,
+            conexion_externa=conexion_externa
+        )
+
+        if not id_reserva:
+            raise RuntimeError("No se pudo generar el registro principal de la reserva.")
+
+        from dao.huesped_dao import HuespedDAO
+        from dao.reservas_huespedes_dao import ReservasHuespedesDAO
+        from dao.reservas_habitaciones_dao import ReservasHabitacionesDAO
+        from models.huesped import Huesped
+
+        huesped_dao = HuespedDAO()
+        reserva_huesped_dao = ReservasHuespedesDAO()
+        reserva_habitacion_dao = ReservasHabitacionesDAO()
+
+        try:
+            habitaciones_procesadas = set()
+
+            for h_info in huespedes_lista:
+                dni_huesped = h_info.get("dni")
+                id_habitacion = h_info.get("id_habitacion")
+
+                if not id_habitacion:
+                    raise ValueError(f"El huésped {h_info.get('nombre')} no tiene una habitación asignada.")
+
+                if not dni_huesped:
+                    raise ValueError("Todos los huéspedes deben tener un DNI válido.")
+
+                # Pasar conexion_externa aquí también
+                huesped_obj = huesped_dao.obtener_huesped_por_dni(dni_huesped, conexion_externa=conexion_externa)
+                
+                if huesped_obj:
+                    id_huesped = huesped_obj.get_id_persona()
+                else:
+                    nuevo_huesped = Huesped(
+                        id_huesped=None,
+                        nombre=h_info.get("nombre"),
+                        apellido=h_info.get("apellido"),
+                        dni=dni_huesped,
+                        telefono=h_info.get("telefono", ""),
+                        activo=True
+                    )
+                    # Pasar conexion_externa al crear huésped
+                    id_huesped = huesped_dao.crear_huesped(nuevo_huesped, conexion_externa=conexion_externa)
+                    if not id_huesped:
+                        raise RuntimeError(f"No se pudo registrar al huésped con DNI {dni_huesped}.")
+
+                # Asociar huésped pasando conexion_externa
+                asociacion_huesped_ok = reserva_huesped_dao.asociar_huesped_a_reserva(
+                    id_reserva=id_reserva, 
+                    id_huesped=id_huesped, #type: ignore
+                    conexion_externa=conexion_externa
+                )
+                if not asociacion_huesped_ok:
+                    raise RuntimeError(f"Falló la asociación del huésped ID {id_huesped} a la reserva.")
+
+                # Asociar habitación pasando conexion_externa
+                if id_habitacion not in habitaciones_procesadas:
+                    asociacion_hab_ok = reserva_habitacion_dao.asociar_habitacion_a_reserva(
+                        id_reserva=id_reserva,
+                        id_habitacion=int(id_habitacion),
+                        conexion_externa=conexion_externa
+                    )
+                    if not asociacion_hab_ok:
+                        raise RuntimeError(f"Falló la asociación de la habitación ID {id_habitacion} a la reserva.")
+                    
+                    habitaciones_procesadas.add(id_habitacion)
+
+            logger.info(f"Reserva compleja ID {id_reserva} creada y asociada con éxito.")
+            return id_reserva
+
+        except Exception as e:
+            logger.error(f"Error crítico en transacción de reserva compleja. Revirtiendo... Detalle: {e}")
+            self.eliminar_reserva(id_reserva)
+            raise RuntimeError(f"Error al procesar la reserva completa: {e}")
 
     def obtener_reservas(self) -> list[tuple[Reserva, int] | None]:
         """Obtiene el listado completo de reservas junto con el ID de su cliente."""
+        logger.info("Solicitud para obtener listado completo de reservas.")
         return self.reserva_dao.obtener_reservas()
 
-    def obtener_reserva_por_id(self, id_reserva: int) -> Reserva | None:
+    def obtener_reserva_por_id(self, id_reserva: int, conexion_externa = None) -> Reserva | None:
         """Busca una reserva específica por su ID."""
-        return self.reserva_dao.obtener_reserva_por_id(id_reserva)
+        logger.info(f"Solicitud para obtener reserva por ID: {id_reserva}")
+        return self.reserva_dao.obtener_reserva_por_id(id_reserva, conexion_externa=conexion_externa)
 
     def modificar_reserva(
             self, 
@@ -143,6 +268,7 @@ class ReservaService:
             if not cliente or not cliente.get_activo():
                 raise ValueError(f"El cliente con ID {id_cliente} no existe o no está activo.")
 
+        logger.info(f"Solicitud para modificar la reserva ID: {id_reserva}")
         return self.reserva_dao.modificar_reserva(
             id_reserva=id_reserva,
             fecha_reserva=fecha_reserva,
@@ -156,4 +282,5 @@ class ReservaService:
 
     def eliminar_reserva(self, id_reserva: int) -> bool:
         """Realiza la baja lógica de la reserva (activo = False)."""
+        logger.info(f"Solicitud para eliminar (baja lógica) reserva con ID: {id_reserva}")
         return self.reserva_dao.eliminar_reserva(id_reserva)
