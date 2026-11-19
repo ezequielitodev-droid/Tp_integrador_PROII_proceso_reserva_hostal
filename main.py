@@ -18,15 +18,9 @@ load_dotenv(dotenv_path=ruta_env)
 # Importamos tu módulo de configuración de logs
 from loggers.logger_config import configurar_logging
 
-def asegurar_directorios_trabajo():
-    """Asegura que existan las carpetas de logs y backups locales junto al ejecutable o script."""
-    (BASE_DIR / "logs").mkdir(parents=True, exist_ok=True)
-    (BASE_DIR / "backups" / "storage").mkdir(parents=True, exist_ok=True)
 
 def main():
     
-    # 0. Aseguramos la existencia de directorios críticos de escritura antes de activar los logs
-    asegurar_directorios_trabajo()
 
     # 1. Activamos los parlantes y archivos de log antes de levantar nada
     configurar_logging()
