@@ -1,9 +1,11 @@
 # Imports:
 import logging
+import sys
 from pathlib import Path
 from PyQt5.QtWidgets import QMainWindow, QMessageBox, QFileDialog
 from PyQt5 import uic
-from PyQt5.QtCore import QObject
+from PyQt5.QtCore import QObject, QProcess
+from PyQt5.QtWidgets import QApplication
 
 from views.GUI.pages.page_reservas import PageReservas
 from views.GUI.pages.page_dashboard import PageDashboard
@@ -101,7 +103,9 @@ class MainWindow(QMainWindow):
 
         if confirmacion == QMessageBox.Yes:
             # Abrir diálogo para buscar el archivo JSON de respaldo
-            ruta_inicial = Path(__file__).resolve().parent.parent / "backups" / "storage"
+            ROOT_DIR = Path(__file__).resolve().parents[2]
+            ruta_inicial = ROOT_DIR / "backups" / "storage"
+            ruta_inicial.mkdir(parents=True, exist_ok=True)
             archivo, _ = QFileDialog.getOpenFileName(
                 self, 
                 "Seleccionar Archivo de Respaldo", 
@@ -123,10 +127,13 @@ class MainWindow(QMainWindow):
                     # REINICIO LITERAL DE LA APLICACIÓN
                     # -------------------------------------------------------------
                     import sys
+                    from PyQt5.QtCore import QProcess
+                    from PyQt5.QtWidgets import QApplication
                     import os
                     
                     # Cierra la instancia actual y relanza el proceso de Python con los mismos argumentos
-                    os.execl(sys.executable, sys.executable, *sys.argv)
+                    QProcess.startDetached(sys.executable, sys.argv)
+                    QApplication.quit()
                     # -------------------------------------------------------------
                 else:
                     QMessageBox.critical(
