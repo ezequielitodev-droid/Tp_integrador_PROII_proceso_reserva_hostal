@@ -105,7 +105,9 @@ class ReservaService:
         return id_generado
 
     def crear_reserva_completa(self, datos_formulario: dict, conexion_externa = None) -> int:
-        
+        from models.cliente import Cliente
+        from dao.db_connection import obtener_conexion
+
         cliente_info = datos_formulario.get("cliente", {})
         fechas = datos_formulario.get("fechas", {})
         huespedes_lista = datos_formulario.get("huespedes", [])
@@ -113,60 +115,77 @@ class ReservaService:
         if not huespedes_lista:
             raise ValueError("La reserva debe contener al menos un huésped asignado a una habitación.")
 
-        dni_cliente_titular = cliente_info.get("dni")
+        dni_cliente_titular = (cliente_info.get("dni") or "").strip().replace(".", "")
         if not dni_cliente_titular:
             raise ValueError("El DNI del cliente titular es obligatorio.")
 
-        print("🔍 A punto de llamar a obtener_cliente_por_dni con el DNI:", dni_cliente_titular)
-        cliente_existente = self.cliente_dao.obtener_cliente_por_dni(dni_cliente_titular, conexion_externa=conexion_externa)
-        print("🔍 Resultado obtenido:", cliente_existente)
-        if not cliente_existente:
-            print("El cliente esta en NONE")
-        else:
-            print("El cliente si tiene datos...")
-            print(cliente_existente)
-            print(cliente_existente.get_id_persona())
-            print(cliente_existente.get_activo())
-            print(cliente_existente.get_nombre())
-            print(cliente_existente.get_telefono())
-            print(cliente_existente.get_apellido())
-            print(cliente_existente.get_correo())
-        if not cliente_existente or not cliente_existente.get_activo():
-            logger.warning(f"Intento de reserva completa con DNI titular inexistente o inactivo: {dni_cliente_titular}")
-            raise ValueError(
-                f"El cliente titular con DNI {dni_cliente_titular} no existe o no se encuentra activo."
-            )
-        
-        id_cliente = cliente_existente.get_id_persona()
-
-        # Crear la reserva principal pasando la conexión externa
-        id_reserva = self.crear_reserva(
-            fecha_reserva=date.today(),
-            fecha_ingreso=fechas.get("fecha_ingreso"),
-            fecha_salida=fechas.get("fecha_salida"),
-            monto_total=fechas.get("monto_total", 0.0),
-            id_cliente=id_cliente, #type: ignore
-            estado=EstadoReserva.RESERVADA,
-            conexion_externa=conexion_externa
-        )
-
-        if not id_reserva:
-            raise RuntimeError("No se pudo generar el registro principal de la reserva.")
-
-        from dao.huesped_dao import HuespedDAO
-        from dao.reservas_huespedes_dao import ReservasHuespedesDAO
-        from dao.reservas_habitaciones_dao import ReservasHabitacionesDAO
-        from models.huesped import Huesped
-
-        huesped_dao = HuespedDAO()
-        reserva_huesped_dao = ReservasHuespedesDAO()
-        reserva_habitacion_dao = ReservasHabitacionesDAO()
+        # Abrimos una conexión única para toda la operación transaccional si no viene una externa
+        conexion = conexion_externa or obtener_conexion()
+        es_transaccion_propia = conexion_externa is None
 
         try:
+            cliente_existente = self.cliente_dao.obtener_cliente_por_dni(
+                dni_cliente_titular, conexion_externa=conexion
+            )
+
+            if cliente_existente:
+                if not cliente_existente.get_activo():
+                    raise ValueError(
+                        f"El cliente con DNI {dni_cliente_titular} figura como inactivo en el sistema."
+                    )
+                id_cliente = cliente_existente.get_id_persona()
+                logger.info(f"Cliente titular existente reutilizado (ID #{id_cliente}, DNI: {dni_cliente_titular}).")
+            else:
+                nombre_cli = (cliente_info.get("nombre") or "").strip()
+                apellido_cli = (cliente_info.get("apellido") or "").strip()
+                telefono_cli = (cliente_info.get("telefono") or "").strip()
+                correo_cli = (cliente_info.get("correo") or "").strip()
+
+                if not nombre_cli or not apellido_cli:
+                    raise ValueError("Para registrar un cliente nuevo, Nombre y Apellido son obligatorios.")
+
+                nuevo_cliente = Cliente(
+                    id_cliente=None,
+                    nombre=nombre_cli,
+                    apellido=apellido_cli,
+                    dni=dni_cliente_titular,
+                    telefono=telefono_cli,
+                    correo=correo_cli,
+                    activo=True
+                )
+                id_cliente = self.cliente_dao.crear_cliente(nuevo_cliente, conexion_externa=conexion)
+                if not id_cliente:
+                    raise RuntimeError(f"No se pudo registrar al nuevo cliente titular con DNI {dni_cliente_titular}.")
+
+                logger.info(f"Nuevo cliente titular registrado (ID #{id_cliente}, DNI: {dni_cliente_titular}).")
+
+            # Crear la reserva principal pasando la misma conexión
+            id_reserva = self.crear_reserva(
+                fecha_reserva=date.today(),
+                fecha_ingreso=fechas.get("fecha_ingreso"),
+                fecha_salida=fechas.get("fecha_salida"),
+                monto_total=fechas.get("monto_total", 0.0),
+                id_cliente=id_cliente,  # type: ignore
+                estado=EstadoReserva.RESERVADA,
+                conexion_externa=conexion
+            )
+
+            if not id_reserva:
+                raise RuntimeError("No se pudo generar el registro principal de la reserva.")
+
+            from dao.huesped_dao import HuespedDAO
+            from dao.reservas_huespedes_dao import ReservasHuespedesDAO
+            from dao.reservas_habitaciones_dao import ReservasHabitacionesDAO
+            from models.huesped import Huesped
+
+            huesped_dao = HuespedDAO()
+            reserva_huesped_dao = ReservasHuespedesDAO()
+            reserva_habitacion_dao = ReservasHabitacionesDAO()
+
             habitaciones_procesadas = set()
 
             for h_info in huespedes_lista:
-                dni_huesped = h_info.get("dni")
+                dni_huesped = (h_info.get("dni") or "").strip().replace(".", "")
                 id_habitacion = h_info.get("id_habitacion")
 
                 if not id_habitacion:
@@ -175,9 +194,8 @@ class ReservaService:
                 if not dni_huesped:
                     raise ValueError("Todos los huéspedes deben tener un DNI válido.")
 
-                # Pasar conexion_externa aquí también
-                huesped_obj = huesped_dao.obtener_huesped_por_dni(dni_huesped, conexion_externa=conexion_externa)
-                
+                huesped_obj = huesped_dao.obtener_huesped_por_dni(dni_huesped, conexion_externa=conexion)
+
                 if huesped_obj:
                     id_huesped = huesped_obj.get_id_persona()
                 else:
@@ -189,40 +207,46 @@ class ReservaService:
                         telefono=h_info.get("telefono", ""),
                         activo=True
                     )
-                    # Pasar conexion_externa al crear huésped
-                    id_huesped = huesped_dao.crear_huesped(nuevo_huesped, conexion_externa=conexion_externa)
+                    id_huesped = huesped_dao.crear_huesped(nuevo_huesped, conexion_externa=conexion)
                     if not id_huesped:
                         raise RuntimeError(f"No se pudo registrar al huésped con DNI {dni_huesped}.")
 
-                # Asociar huésped pasando conexion_externa
                 asociacion_huesped_ok = reserva_huesped_dao.asociar_huesped_a_reserva(
-                    id_reserva=id_reserva, 
-                    id_huesped=id_huesped, #type: ignore
-                    conexion_externa=conexion_externa
+                    id_reserva=id_reserva,
+                    id_huesped=id_huesped,  # type: ignore
+                    conexion_externa=conexion
                 )
                 if not asociacion_huesped_ok:
                     raise RuntimeError(f"Falló la asociación del huésped ID {id_huesped} a la reserva.")
 
-                # Asociar habitación pasando conexion_externa
                 if id_habitacion not in habitaciones_procesadas:
                     asociacion_hab_ok = reserva_habitacion_dao.asociar_habitacion_a_reserva(
                         id_reserva=id_reserva,
                         id_habitacion=int(id_habitacion),
-                        conexion_externa=conexion_externa
+                        conexion_externa=conexion
                     )
                     if not asociacion_hab_ok:
                         raise RuntimeError(f"Falló la asociación de la habitación ID {id_habitacion} a la reserva.")
-                    
+
                     habitaciones_procesadas.add(id_habitacion)
+
+            # Confirmamos toda la transacción atómica en Aiven
+            if es_transaccion_propia:
+                conexion.commit()
 
             logger.info(f"Reserva compleja ID {id_reserva} creada y asociada con éxito.")
             return id_reserva
 
         except Exception as e:
             logger.error(f"Error crítico en transacción de reserva compleja. Revirtiendo... Detalle: {e}")
-            self.eliminar_reserva(id_reserva)
+            if es_transaccion_propia and conexion:
+                conexion.rollback()
             raise RuntimeError(f"Error al procesar la reserva completa: {e}")
 
+        finally:
+            if es_transaccion_propia and conexion:
+                conexion.close()
+    
     def obtener_reservas(self) -> list[tuple[Reserva, int] | None]:
         """Obtiene el listado completo de reservas junto con el ID de su cliente."""
         logger.info("Solicitud para obtener listado completo de reservas.")
@@ -320,3 +344,48 @@ class ReservaService:
         """Realiza la baja lógica de la reserva (activo = False)."""
         logger.info(f"Solicitud para eliminar (baja lógica) reserva con ID: {id_reserva}")
         return self.reserva_dao.eliminar_reserva(id_reserva)
+
+    def filtrar_reservas(
+            self,
+            reservas: list[tuple[Reserva, int] | None],
+            texto_busqueda: str = "",
+            estado: EstadoReserva | None = None,
+            fecha_desde: date | None = None,
+            fecha_hasta: date | None = None
+    ) -> list[tuple[Reserva, int]]:
+        """Filtra en memoria una lista de tuplas (Reserva, id_cliente) según los criterios indicados."""
+        resultado = []
+        texto = texto_busqueda.strip().lower()
+
+        for item in reservas:
+            if not item or not item[0]:
+                continue
+
+            reserva_obj, id_cliente = item
+
+            if reserva_obj.get_activo() != 1:
+                continue
+
+            estado_obj = reserva_obj.get_estado() if hasattr(reserva_obj, "get_estado") else EstadoReserva.RESERVADA
+            if estado is not None and estado_obj != estado:
+                continue
+
+            f_ingreso = reserva_obj.get_fecha_ingreso()
+            if fecha_desde is not None and isinstance(f_ingreso, date) and f_ingreso < fecha_desde:
+                continue
+            if fecha_hasta is not None and isinstance(f_ingreso, date) and f_ingreso > fecha_hasta:
+                continue
+
+            if texto:
+                texto_buscable = (
+                    f"{reserva_obj.get_id_reserva()} "
+                    f"{reserva_obj.get_fecha_ingreso()} "
+                    f"{reserva_obj.get_fecha_salida()} "
+                    f"{reserva_obj.get_monto_total()}"
+                ).lower()
+                if texto not in texto_buscable:
+                    continue
+
+            resultado.append((reserva_obj, id_cliente))
+
+        return resultado
