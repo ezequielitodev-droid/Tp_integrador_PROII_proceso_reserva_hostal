@@ -66,6 +66,7 @@ def _obtener_pool() -> pooling.MySQLConnectionPool:
             database=_leer_variable("DB_NAME"),
             ssl_ca=str(ruta_cert),
             connection_timeout=10,
+            use_pure=True
         )
 
     return _pool
@@ -74,13 +75,19 @@ def _obtener_pool() -> pooling.MySQLConnectionPool:
 def obtener_conexion():
 
     """
-        Devuelve una conexión reutilizable del pool.
+        Devuelve una conexión activa y reutilizable del pool.
 
-        El pool se crea la primera vez que se llama a esta función, y no al
-        importar el módulo. Al llamar a close() sobre la conexión devuelta, no se
-        cierra: vuelve al pool para que otra operación la reutilice.
+        El pool se inicializa de forma diferida (lazy) la primera vez que se invoca
+        esta función, y no al importar el módulo. Antes de entregar la conexión,
+        verifica que siga activa en el servidor (evitando fallos por timeouts de
+        inactividad en la nube) y la reconecta automáticamente si fue cerrada.
+        Al llamar a close() sobre la conexión devuelta, esta no se destruye, sino
+        que regresa al pool para ser reutilizada por otra operación.
     """
-    return _obtener_pool().get_connection()
+    conn = _obtener_pool().get_connection()
+    if not conn.is_connected():
+        conn.reconnect(attempts=3, delay=1)
+    return conn
 
 
 # Prueba conexion
