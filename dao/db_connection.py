@@ -58,7 +58,7 @@ def _obtener_pool() -> pooling.MySQLConnectionPool:
         _pool = pooling.MySQLConnectionPool(
             pool_name="hostal_pool",
             pool_size=TAMANO_POOL,
-            pool_reset_session=False,
+            pool_reset_session=True,
             host=_leer_variable("DB_HOST"),
             port=int(_leer_variable("DB_PORT")),
             user=_leer_variable("DB_USER"),
