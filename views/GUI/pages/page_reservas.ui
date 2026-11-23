@@ -38,7 +38,7 @@
   </property>
   <layout class="QVBoxLayout" name="layout_principal">
    <property name="spacing">
-    <number>16</number>
+    <number>14</number>
    </property>
    <property name="leftMargin">
     <number>20</number>
@@ -214,6 +214,189 @@
     </widget>
    </item>
 
+   <!-- Barra de Filtros -->
+   <item>
+    <widget class="QFrame" name="frame_filtros">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>60</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+       QFrame#frame_filtros {
+           background-color: #3B3B3B;
+           border: 1px solid #232323;
+           border-radius: 9px;
+       }
+       QLineEdit, QComboBox, QDateEdit {
+           background-color: #2D2D2D;
+           color: #FFFFFF;
+           border: 1px solid #4A4A4A;
+           border-radius: 6px;
+           padding: 6px 10px;
+           font-size: 12px;
+       }
+       QLineEdit:focus, QComboBox:focus, QDateEdit:focus {
+           border: 1px solid #FDB93B;
+       }
+       QDateEdit:disabled {
+           color: #718096;
+           background-color: #262626;
+       }
+       QComboBox::drop-down {
+           border: none;
+           width: 22px;
+       }
+       QComboBox QAbstractItemView {
+           background-color: #2D2D2D;
+           color: #FFFFFF;
+           border: 1px solid #4A4A4A;
+           selection-background-color: #FDB93B;
+           selection-color: #232323;
+           outline: 0;
+       }
+       QCheckBox {
+           background-color: transparent;
+           color: #E2E8F0;
+           font-size: 12px;
+           spacing: 6px;
+       }
+       QLabel {
+           background-color: transparent;
+           color: #A0AEC0;
+           font-size: 12px;
+       }
+      </string>
+     </property>
+     <layout class="QHBoxLayout" name="layout_filtros" stretch="2,1,0,0,0,0,0">
+      <property name="spacing">
+       <number>10</number>
+      </property>
+      <property name="leftMargin">
+       <number>15</number>
+      </property>
+      <property name="topMargin">
+       <number>10</number>
+      </property>
+      <property name="rightMargin">
+       <number>15</number>
+      </property>
+      <property name="bottomMargin">
+       <number>10</number>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="input_buscar_reserva">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>34</height>
+         </size>
+        </property>
+        <property name="placeholderText">
+         <string>Buscar por #ID, fecha (AAAA-MM-DD) o monto...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="combo_filtro_estado">
+        <property name="minimumSize">
+         <size>
+          <width>145</width>
+          <height>34</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="chk_filtrar_fechas">
+        <property name="text">
+         <string>Ingreso:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDateEdit" name="date_filtro_desde">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>115</width>
+          <height>34</height>
+         </size>
+        </property>
+        <property name="displayFormat">
+         <string>yyyy-MM-dd</string>
+        </property>
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_hasta_filtro">
+        <property name="text">
+         <string>a</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDateEdit" name="date_filtro_hasta">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>115</width>
+          <height>34</height>
+         </size>
+        </property>
+        <property name="displayFormat">
+         <string>yyyy-MM-dd</string>
+        </property>
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_limpiar_filtros">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>34</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+          QPushButton {
+              background-color: #4A4A4A;
+              color: #FFFFFF;
+              border: 1px solid #555555;
+              border-radius: 7px;
+              padding: 6px 14px;
+              font-weight: bold;
+              font-size: 12px;
+          }
+          QPushButton:hover {
+              background-color: #555555;
+          }
+          QPushButton:pressed {
+              background-color: #333333;
+          }
+         </string>
+        </property>
+        <property name="text">
+         <string>Limpiar</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+
    <!-- Contenedor de la Lista -->
    <item>
     <widget class="QFrame" name="frame_lista">
@@ -274,4 +457,5 @@
   </layout>
  </widget>
  <resources/>
+ <connections/>
 </ui>
